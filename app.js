@@ -289,6 +289,12 @@ const tasks = [
   { id: "review", title: "錯題回顧", detail: "重新說明錯題為什麼錯" }
 ];
 
+const dailyKey = getDateKey(new Date());
+const dailyQuestions = makeDailySet(questions, dailyKey, "questions");
+const dailyVocab = makeDailySet(vocab, dailyKey, "vocab");
+const dailyReadings = makeDailySet(withSourceIndex(readingPassages), dailyKey, "readings");
+const dailyTypingPrompts = makeDailySet(typingPrompts, dailyKey, "typing");
+
 const state = JSON.parse(localStorage.getItem("toeicSprintState") || "{}");
 state.answers ||= {};
 state.knownWords ||= [];
@@ -300,10 +306,11 @@ state.bestWpm ||= 0;
 state.completedDates ||= state.lastCompleted ? [state.lastCompleted] : [];
 state.completedDates = [...new Set(state.completedDates)];
 state.days = Math.max(state.days, state.completedDates.length);
-state.taskDate ||= getDateKey(new Date());
-if (state.taskDate !== getDateKey(new Date())) {
+state.taskDate ||= dailyKey;
+if (state.taskDate !== dailyKey) {
   state.tasks = {};
-  state.taskDate = getDateKey(new Date());
+  state.answers = {};
+  state.taskDate = dailyKey;
 }
 
 let questionIndex = 0;
@@ -331,10 +338,10 @@ function renderStats() {
 }
 
 function renderQuestion() {
-  const question = questions[questionIndex];
+  const question = dailyQuestions[questionIndex];
   document.querySelector("#question-type").textContent = question.type;
   document.querySelector("#question-index").textContent = questionIndex + 1;
-  document.querySelector("#question-total").textContent = questions.length;
+  document.querySelector("#question-total").textContent = dailyQuestions.length;
   document.querySelector("#question-text").textContent = question.text;
 
   const answers = document.querySelector("#answers");
@@ -353,7 +360,7 @@ function renderQuestion() {
 }
 
 function chooseAnswer(index) {
-  const question = questions[questionIndex];
+  const question = dailyQuestions[questionIndex];
   state.answers[questionIndex] = index === question.answer;
   save();
   applyAnsweredState(index);
@@ -362,7 +369,7 @@ function chooseAnswer(index) {
 }
 
 function applyAnsweredState(selectedIndex = null) {
-  const question = questions[questionIndex];
+  const question = dailyQuestions[questionIndex];
   const buttons = [...document.querySelectorAll(".answer")];
 
   buttons.forEach((button, index) => {
@@ -378,7 +385,7 @@ function applyAnsweredState(selectedIndex = null) {
 }
 
 function renderVocab() {
-  const item = vocab[vocabIndex];
+  const item = dailyVocab[vocabIndex];
   document.querySelector("#vocab-category").textContent = item.category;
   document.querySelector("#vocab-word").textContent = item.word;
   document.querySelector("#vocab-phonetic").textContent = item.phonetic;
@@ -396,7 +403,7 @@ function renderReadingList() {
   const list = document.querySelector("#reading-list");
   list.innerHTML = "";
 
-  readingPassages.forEach((passage, index) => {
+  dailyReadings.forEach((passage, index) => {
     const button = document.createElement("button");
     button.className = "reading-option";
     button.type = "button";
@@ -412,7 +419,7 @@ function renderReadingList() {
 }
 
 function renderReading() {
-  const passage = readingPassages[readingIndex];
+  const passage = dailyReadings[readingIndex];
   document.querySelector("#reading-type").textContent = passage.type;
   document.querySelector("#reading-level").textContent = passage.level;
   document.querySelector("#reading-title").textContent = passage.title;
@@ -453,7 +460,7 @@ function renderClickableWords(text) {
 }
 
 function chooseReadingAnswer(index) {
-  const passage = readingPassages[readingIndex];
+  const passage = dailyReadings[readingIndex];
   const buttons = [...document.querySelectorAll("#reading-answers .answer")];
 
   buttons.forEach((button, buttonIndex) => {
@@ -565,6 +572,40 @@ function getDateKey(date) {
   return `${year}-${month}-${day}`;
 }
 
+function withSourceIndex(items) {
+  return items.map((item, index) => ({ ...item, sourceIndex: index }));
+}
+
+function makeDailySet(items, key, salt) {
+  const source = items.map((item) => item);
+  let seed = hashString(`${key}-${salt}`);
+
+  for (let index = source.length - 1; index > 0; index -= 1) {
+    seed = seededNumber(seed + index);
+    const swapIndex = seed % (index + 1);
+    [source[index], source[swapIndex]] = [source[swapIndex], source[index]];
+  }
+
+  return source;
+}
+
+function hashString(text) {
+  let hash = 2166136261;
+  for (const char of text) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+function seededNumber(seed) {
+  let value = seed >>> 0;
+  value ^= value << 13;
+  value ^= value >>> 17;
+  value ^= value << 5;
+  return value >>> 0;
+}
+
 function renderGoal() {
   const input = document.querySelector("#score-goal");
   const output = document.querySelector("#score-output");
@@ -577,7 +618,7 @@ function renderGoal() {
 
 function renderReviewList() {
   const list = document.querySelector("#review-list");
-  const missed = questions
+  const missed = dailyQuestions
     .map((question, index) => ({ question, index }))
     .filter((item) => state.answers[item.index] === false);
 
@@ -587,7 +628,7 @@ function renderReviewList() {
 }
 
 function renderTypingPrompt() {
-  const typingItem = typingPrompts[typingIndex];
+  const typingItem = dailyTypingPrompts[typingIndex];
   const prompt = typingItem.english;
   const input = document.querySelector("#typing-input").value;
   const promptElement = document.querySelector("#typing-prompt");
@@ -613,7 +654,7 @@ function renderTypingPrompt() {
 }
 
 function updateTypingStats() {
-  const prompt = typingPrompts[typingIndex].english;
+  const prompt = dailyTypingPrompts[typingIndex].english;
   const input = document.querySelector("#typing-input").value;
   const elapsed = typingStart ? Math.max(1, Math.floor((Date.now() - typingStart) / 1000)) : 0;
   const correctChars = [...input].filter((char, index) => char === prompt[index]).length;
@@ -656,11 +697,11 @@ function resetTyping(advance = false) {
   typingTimer = null;
   typingStart = null;
   if (advance) {
-    typingIndex = (typingIndex + 1) % typingPrompts.length;
+    typingIndex = (typingIndex + 1) % dailyTypingPrompts.length;
   }
   const input = document.querySelector("#typing-input");
   input.value = "";
-  input.maxLength = typingPrompts[typingIndex].english.length;
+  input.maxLength = dailyTypingPrompts[typingIndex].english.length;
   document.querySelector("#typing-wpm").textContent = "0";
   document.querySelector("#typing-accuracy").textContent = "100%";
   document.querySelector("#typing-time").textContent = "0s";
@@ -669,7 +710,8 @@ function resetTyping(advance = false) {
 }
 
 function syncTypingToReading(shouldReset = true) {
-  const nextIndex = typingPrompts.findIndex((prompt) => prompt.readingIndex === readingIndex);
+  const sourceIndex = dailyReadings[readingIndex].sourceIndex;
+  const nextIndex = dailyTypingPrompts.findIndex((prompt) => prompt.readingIndex === sourceIndex);
   if (nextIndex === -1) {
     return;
   }
@@ -721,12 +763,12 @@ function switchPracticeTab(tabName) {
 }
 
 document.querySelector("#next-question").addEventListener("click", () => {
-  questionIndex = (questionIndex + 1) % questions.length;
+  questionIndex = (questionIndex + 1) % dailyQuestions.length;
   renderQuestion();
 });
 
 document.querySelector("#prev-question").addEventListener("click", () => {
-  questionIndex = (questionIndex - 1 + questions.length) % questions.length;
+  questionIndex = (questionIndex - 1 + dailyQuestions.length) % dailyQuestions.length;
   renderQuestion();
 });
 
@@ -744,19 +786,19 @@ document.querySelector("#vocab-card").addEventListener("keydown", (event) => {
 });
 
 document.querySelector("#next-word").addEventListener("click", () => {
-  vocabIndex = (vocabIndex + 1) % vocab.length;
+  vocabIndex = (vocabIndex + 1) % dailyVocab.length;
   showingMeaning = false;
   renderVocab();
 });
 
 document.querySelector("#prev-word").addEventListener("click", () => {
-  vocabIndex = (vocabIndex - 1 + vocab.length) % vocab.length;
+  vocabIndex = (vocabIndex - 1 + dailyVocab.length) % dailyVocab.length;
   showingMeaning = false;
   renderVocab();
 });
 
 document.querySelector("#known-word").addEventListener("click", () => {
-  const word = vocab[vocabIndex].word;
+  const word = dailyVocab[vocabIndex].word;
   if (!state.knownWords.includes(word)) {
     state.knownWords.push(word);
   }
