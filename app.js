@@ -353,6 +353,7 @@ if (state.taskDate !== dailyKey) {
 }
 
 let questionIndex = 0;
+let quizCompleted = false;
 let vocabIndex = 0;
 let showingMeaning = false;
 let typingIndex = 0;
@@ -377,6 +378,11 @@ function renderStats() {
 }
 
 function renderQuestion() {
+  if (quizCompleted) {
+    renderQuizComplete();
+    return;
+  }
+
   const question = dailyQuestions[questionIndex];
   document.querySelector("#question-index").textContent = questionIndex + 1;
   document.querySelector("#question-total").textContent = dailyQuestions.length;
@@ -394,7 +400,28 @@ function renderQuestion() {
   });
 
   document.querySelector("#feedback").textContent = "選一個答案後，這裡會顯示解析。";
+  document.querySelector("#prev-question").disabled = questionIndex === 0;
+  document.querySelector("#next-question").textContent = questionIndex === dailyQuestions.length - 1 ? "完成題組" : "下一題";
   applyAnsweredState();
+}
+
+function renderQuizComplete() {
+  const answered = dailyQuestions.map((_, index) => state.answers[index]);
+  const answeredCount = answered.filter((answer) => answer !== undefined).length;
+  const correctCount = answered.filter(Boolean).length;
+  const accuracy = answeredCount ? Math.round((correctCount / answeredCount) * 100) : 0;
+
+  document.querySelector("#question-index").textContent = dailyQuestions.length;
+  document.querySelector("#question-total").textContent = dailyQuestions.length;
+  document.querySelector("#question-text").textContent = "今日迷你題庫已完成";
+  document.querySelector("#answers").innerHTML = "";
+  document.querySelector("#feedback").innerHTML = `
+    <strong>完成本日題組。</strong>
+    <p>你完成了 ${answeredCount}/${dailyQuestions.length} 題，答對 ${correctCount} 題，正確率 ${accuracy}%。</p>
+    <p>可以到錯題提醒回顧解析，或重新檢視本日題組。</p>
+  `;
+  document.querySelector("#prev-question").disabled = true;
+  document.querySelector("#next-question").textContent = "重新檢視本日題組";
 }
 
 function chooseAnswer(index) {
@@ -802,12 +829,28 @@ function switchPracticeTab(tabName) {
 }
 
 document.querySelector("#next-question").addEventListener("click", () => {
-  questionIndex = (questionIndex + 1) % dailyQuestions.length;
+  if (quizCompleted) {
+    quizCompleted = false;
+    questionIndex = 0;
+    renderQuestion();
+    return;
+  }
+
+  if (questionIndex === dailyQuestions.length - 1) {
+    quizCompleted = true;
+    renderQuestion();
+    return;
+  }
+
+  questionIndex += 1;
   renderQuestion();
 });
 
 document.querySelector("#prev-question").addEventListener("click", () => {
-  questionIndex = (questionIndex - 1 + dailyQuestions.length) % dailyQuestions.length;
+  if (questionIndex === 0) {
+    return;
+  }
+  questionIndex -= 1;
   renderQuestion();
 });
 
