@@ -299,7 +299,10 @@ const state = JSON.parse(localStorage.getItem("toeicSprintState") || "{}");
 state.answers ||= {};
 state.knownWords ||= [];
 state.tasks ||= {};
-state.goal ||= 750;
+state.goal ||= 800;
+if (state.goal === 750) {
+  state.goal = 800;
+}
 state.days ||= 0;
 state.lastCompleted ||= "";
 state.bestWpm ||= 0;
@@ -611,9 +614,9 @@ function renderGoal() {
   const output = document.querySelector("#score-output");
   input.value = state.goal;
   output.textContent = state.goal;
-  document.querySelector("#score-message").textContent = state.goal >= 850
-    ? "高分目標需要穩定累積閱讀速度與聽力耐心。"
-    : "先把基礎題型和高頻字掌握，分數會更快穩住。";
+  document.querySelector("#score-message").textContent = state.goal >= 800
+    ? "800 分目標要加強閱讀速度、推論判斷、商務字彙與句構精準度。"
+    : "先穩住核心文法與高頻字彙，再逐步拉高閱讀速度。";
 }
 
 function renderReviewList() {
