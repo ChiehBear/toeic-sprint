@@ -4,42 +4,78 @@ const questions = [
     text: "The sales report must be submitted _____ Friday afternoon.",
     options: ["by", "during", "since", "while"],
     answer: 0,
-    explanation: "by 表示期限，在星期五下午以前要提交。"
+    explanation: "by 表示期限，在星期五下午以前要提交。",
+    optionExplanations: [
+      "by 正確，表示不晚於某個期限。",
+      "during 錯，表示某段期間內發生，不能用來標示提交期限。",
+      "since 錯，表示自從某時間點開始，不符合 deadline 語意。",
+      "while 錯，表示當某事正在發生時，後面通常接子句。"
+    ]
   },
   {
     type: "Part 5",
     text: "Our customer service team responds to inquiries as _____ as possible.",
     options: ["quick", "quickly", "quicker", "quickness"],
     answer: 1,
-    explanation: "修飾動詞 responds 要用副詞 quickly。"
+    explanation: "修飾動詞 responds 要用副詞 quickly。",
+    optionExplanations: [
+      "quick 錯，是形容詞，不能直接修飾 responds。",
+      "quickly 正確，副詞修飾動詞 responds。",
+      "quicker 錯，是比較級形容詞/副詞，句型 as ... as possible 需要原級。",
+      "quickness 錯，是名詞，不能放在這個位置修飾動作。"
+    ]
   },
   {
     type: "Vocabulary",
     text: "The company will _____ its new refund policy next month.",
     options: ["implement", "occur", "attend", "repair"],
     answer: 0,
-    explanation: "implement 是實施、執行政策或計畫。"
+    explanation: "implement 是實施、執行政策或計畫。",
+    optionExplanations: [
+      "implement 正確，常搭配 policy、plan、procedure，表示實施。",
+      "occur 錯，表示發生，通常是不及物動詞，不能直接接 policy。",
+      "attend 錯，表示出席，常接 meeting、conference。",
+      "repair 錯，表示修理，通常接設備或物品，不接政策。"
+    ]
   },
   {
     type: "Reading",
     text: "Notice: The cafeteria will be closed from 2 p.m. to 4 p.m. for maintenance. What should employees do?",
     options: ["Submit a report", "Use the cafeteria earlier", "Call maintenance", "Cancel lunch orders"],
     answer: 1,
-    explanation: "公告指出 2 到 4 點關閉，因此員工應提早使用餐廳。"
+    explanation: "公告指出 2 到 4 點關閉，因此員工應提早使用餐廳。",
+    optionExplanations: [
+      "Submit a report 錯，公告沒有提到提交報告。",
+      "Use the cafeteria earlier 正確，餐廳 2 到 4 點關閉，所以要提早使用。",
+      "Call maintenance 錯，maintenance 是關閉原因，不是要求員工聯絡維修。",
+      "Cancel lunch orders 錯，公告沒有說要取消午餐訂單。"
+    ]
   },
   {
     type: "Part 5",
     text: "All applicants are required to attach a copy of _____ resume.",
     options: ["they", "them", "their", "theirs"],
     answer: 2,
-    explanation: "resume 是名詞，要用所有格形容詞 their。"
+    explanation: "resume 是名詞，要用所有格形容詞 their。",
+    optionExplanations: [
+      "they 錯，是主詞代名詞，不能放在名詞 resume 前面。",
+      "them 錯，是受詞代名詞，不能修飾名詞。",
+      "their 正確，是所有格形容詞，可修飾 resume。",
+      "theirs 錯，是所有格代名詞，後面不能再接名詞 resume。"
+    ]
   },
   {
     type: "Listening",
     text: "You hear: The train to Taichung has been delayed due to track maintenance. What is the problem?",
     options: ["A meeting is canceled", "A train is late", "A ticket is missing", "A station is closed"],
     answer: 1,
-    explanation: "has been delayed 表示列車誤點。"
+    explanation: "has been delayed 表示列車誤點。",
+    optionExplanations: [
+      "A meeting is canceled 錯，句子談的是 train，不是 meeting。",
+      "A train is late 正確，has been delayed 表示列車延誤。",
+      "A ticket is missing 錯，沒有提到 ticket 遺失。",
+      "A station is closed 錯，maintenance 是軌道維修，不是車站關閉。"
+    ]
   }
 ];
 
@@ -342,7 +378,6 @@ function renderStats() {
 
 function renderQuestion() {
   const question = dailyQuestions[questionIndex];
-  document.querySelector("#question-type").textContent = question.type;
   document.querySelector("#question-index").textContent = questionIndex + 1;
   document.querySelector("#question-total").textContent = dailyQuestions.length;
   document.querySelector("#question-text").textContent = question.text;
@@ -383,7 +418,18 @@ function applyAnsweredState(selectedIndex = null) {
 
   if (selectedIndex !== null) {
     const isCorrect = selectedIndex === question.answer;
-    document.querySelector("#feedback").textContent = `${isCorrect ? "答對了。" : "這題要再看一次。"} ${question.explanation}`;
+    document.querySelector("#feedback").innerHTML = `
+      <strong>${isCorrect ? "答對了。" : "這題要再看一次。"}</strong>
+      <p>${escapeText(question.explanation)}</p>
+      <ul class="option-explanations">
+        ${question.optionExplanations.map((explanation, index) => `
+          <li class="${index === question.answer ? "right" : "not-right"}">
+            <b>${String.fromCharCode(65 + index)}</b>
+            <span>${escapeText(explanation)}</span>
+          </li>
+        `).join("")}
+      </ul>
+    `;
   }
 }
 
@@ -609,16 +655,6 @@ function seededNumber(seed) {
   return value >>> 0;
 }
 
-function renderGoal() {
-  const input = document.querySelector("#score-goal");
-  const output = document.querySelector("#score-output");
-  input.value = state.goal;
-  output.textContent = state.goal;
-  document.querySelector("#score-message").textContent = state.goal >= 800
-    ? "800 分目標要加強閱讀速度、推論判斷、商務字彙與句構精準度。"
-    : "先穩住核心文法與高頻字彙，再逐步拉高閱讀速度。";
-}
-
 function renderReviewList() {
   const list = document.querySelector("#review-list");
   const missed = dailyQuestions
@@ -810,12 +846,6 @@ document.querySelector("#known-word").addEventListener("click", () => {
   renderStats();
 });
 
-document.querySelector("#score-goal").addEventListener("input", (event) => {
-  state.goal = Number(event.target.value);
-  save();
-  renderGoal();
-});
-
 document.querySelector("#prev-month").addEventListener("click", () => changeCalendarMonth(-1));
 document.querySelector("#next-month").addEventListener("click", () => changeCalendarMonth(1));
 
@@ -833,7 +863,6 @@ renderQuestion();
 renderReading();
 renderVocab();
 renderTasks();
-renderGoal();
 renderStats();
 renderReviewList();
 renderCalendar();

@@ -398,7 +398,7 @@ h3 {
 
 .quiz-meta {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 12px;
   margin-bottom: 22px;
   color: var(--muted);
@@ -445,6 +445,56 @@ h3 {
   border-radius: 12px;
   background: var(--surface-soft);
   color: var(--muted);
+}
+
+.feedback strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+
+.feedback p {
+  margin-bottom: 10px;
+}
+
+.option-explanations {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.option-explanations li {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--muted);
+}
+
+.option-explanations li.right {
+  border-color: rgba(46, 155, 102, 0.45);
+  background: #edf8f1;
+  color: #1d6b47;
+}
+
+.option-explanations b {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 999px;
+  background: #edf1ef;
+  color: var(--ink);
+}
+
+.option-explanations li.right b {
+  background: #2e9b66;
+  color: #fff;
 }
 
 .reading-layout {
@@ -765,32 +815,12 @@ h3 {
 
 .progress-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 1.2fr) minmax(240px, 0.8fr) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 1.2fr) minmax(0, 1fr);
   gap: 16px;
 }
 
 .progress .panel {
   padding: 24px;
-}
-
-.range-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  color: var(--muted);
-  font-weight: 800;
-}
-
-output {
-  color: var(--teal-dark);
-  font-family: "Inter", sans-serif;
-  font-size: 1.8rem;
-}
-
-input[type="range"] {
-  width: 100%;
-  accent-color: var(--teal);
 }
 
 .calendar-panel {
