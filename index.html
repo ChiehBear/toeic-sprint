@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17324d">
+    <meta name="description" content="TOEIC Sprint 是可在手機瀏覽器使用的多益英文自學練習網站。">
+    <title>TOEIC Sprint | 英文自學練習站</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="TOEIC Sprint 首頁">
+        <span class="brand-mark">TS</span>
+        <span><strong>TOEIC Sprint</strong><small>Daily English Lab</small></span>
+      </a>
+      <nav class="main-nav" aria-label="主要導覽">
+        <a href="#practice">練習</a>
+        <a href="#plan">計畫</a>
+        <a href="#progress">進度</a>
+      </nav>
+      <a class="button nav-cta" href="#practice">開始</a>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Self-study system for TOEIC</p>
+          <h1>把多益準備變成每天 25 分鐘的穩定練習</h1>
+          <p class="lead">從常考單字、閱讀題型、聽力情境到錯題回顧，集中在一個能追蹤進度的自學網站。</p>
+          <div class="hero-chips" aria-label="學習功能">
+            <span>閱讀點字翻譯</span>
+            <span>英打同步文章</span>
+            <span>月曆打卡</span>
+          </div>
+          <div class="hero-actions">
+            <a class="button primary" href="#practice">開始練習</a>
+            <a class="button ghost" href="#plan">安排今日任務</a>
+          </div>
+        </div>
+        <figure class="hero-media">
+          <img src="assets/hero-study.png" alt="英文學習桌面，包含筆電、耳機、筆記與單字卡">
+        </figure>
+      </section>
+
+      <section class="stats" aria-label="學習概覽">
+        <div>
+          <strong id="stat-days">0</strong>
+          <span>完成天數</span>
+        </div>
+        <div>
+          <strong id="stat-score">0%</strong>
+          <span>答題正確率</span>
+        </div>
+        <div>
+          <strong id="stat-words">0</strong>
+          <span>已熟單字</span>
+        </div>
+        <div>
+          <strong id="stat-streak">0</strong>
+          <span>連續學習</span>
+        </div>
+        <div>
+          <strong id="stat-wpm">0</strong>
+          <span>最佳 WPM</span>
+        </div>
+      </section>
+
+      <section class="workbench" id="practice">
+        <div class="section-heading">
+          <p class="eyebrow">Practice Desk</p>
+          <h2>練習工作台</h2>
+          <p>題庫、單字卡與打字練習集中在同一個位置，依照今天想練的能力切換。</p>
+        </div>
+
+        <div class="workbench-shell">
+          <div class="tabs" role="tablist" aria-label="練習類型">
+            <button class="tab-button active" id="tab-quiz" type="button" role="tab" aria-controls="pane-quiz" aria-selected="true" data-tab="quiz">題庫</button>
+            <button class="tab-button" id="tab-reading" type="button" role="tab" aria-controls="pane-reading" aria-selected="false" data-tab="reading">閱讀</button>
+            <button class="tab-button" id="tab-vocab" type="button" role="tab" aria-controls="pane-vocab" aria-selected="false" data-tab="vocab">單字卡</button>
+            <button class="tab-button" id="tab-typing" type="button" role="tab" aria-controls="pane-typing" aria-selected="false" data-tab="typing">打字練習</button>
+          </div>
+
+          <article class="panel quiz-panel practice-pane active" id="pane-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+            <div class="pane-heading">
+              <p class="eyebrow">Question Bank</p>
+              <h3>多益迷你題庫</h3>
+            </div>
+            <div class="quiz-meta">
+              <span id="question-type">Part 5</span>
+              <span><b id="question-index">1</b>/<b id="question-total">6</b></span>
+            </div>
+            <h3 id="question-text"></h3>
+            <div class="answers" id="answers"></div>
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+            <div class="quiz-controls">
+              <button class="icon-button" id="prev-question" type="button" aria-label="上一題" title="上一題">←</button>
+              <button class="button primary" id="next-question" type="button">下一題</button>
+            </div>
+          </article>
+
+          <article class="panel reading-panel practice-pane" id="pane-reading" role="tabpanel" aria-labelledby="tab-reading" hidden>
+            <div class="pane-heading">
+              <p class="eyebrow">Reading</p>
+              <h3>多益閱讀與時事短文</h3>
+            </div>
+            <div class="reading-layout">
+              <aside class="reading-list" id="reading-list" aria-label="閱讀文章列表"></aside>
+              <div class="reading-main">
+                <div class="reading-meta">
+                  <span id="reading-type"></span>
+                  <span id="reading-level"></span>
+                </div>
+                <h3 id="reading-title"></h3>
+                <div class="reading-passage" id="reading-passage"></div>
+                <div class="word-note" id="word-note" aria-live="polite">
+                  點擊文章中的英文單字，這裡會顯示繁體中文解釋。
+                </div>
+                <div class="reading-question">
+                  <h4 id="reading-question"></h4>
+                  <div class="answers" id="reading-answers"></div>
+                  <div class="feedback" id="reading-feedback" aria-live="polite"></div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel vocab-panel practice-pane" id="pane-vocab" role="tabpanel" aria-labelledby="tab-vocab" hidden>
+            <div class="pane-heading">
+              <p class="eyebrow">Vocabulary</p>
+              <h3>高頻單字卡</h3>
+            </div>
+            <div class="vocab-card" id="vocab-card" role="button" tabindex="0" aria-label="翻開單字卡">
+              <div>
+                <span class="tag" id="vocab-category"></span>
+                <h3 id="vocab-word"></h3>
+                <p id="vocab-phonetic"></p>
+              </div>
+              <p id="vocab-meaning"></p>
+              <div class="vocab-details" id="vocab-details"></div>
+            </div>
+            <div class="card-controls">
+              <button class="icon-button" id="prev-word" type="button" aria-label="上一張" title="上一張">←</button>
+              <button class="button secondary" id="known-word" type="button">我會了</button>
+              <button class="icon-button" id="next-word" type="button" aria-label="下一張" title="下一張">→</button>
+            </div>
+          </article>
+
+          <article class="panel typing-panel practice-pane" id="pane-typing" role="tabpanel" aria-labelledby="tab-typing" hidden>
+            <div class="pane-heading">
+              <p class="eyebrow">Typing</p>
+              <h3>英文打字練習</h3>
+            </div>
+            <div class="typing-meta" aria-label="打字成績">
+              <div>
+                <strong id="typing-wpm">0</strong>
+                <span>WPM</span>
+              </div>
+              <div>
+                <strong id="typing-accuracy">100%</strong>
+                <span>正確率</span>
+              </div>
+              <div>
+                <strong id="typing-time">0s</strong>
+                <span>時間</span>
+              </div>
+            </div>
+            <p class="typing-source" id="typing-source"></p>
+            <p class="typing-prompt" id="typing-prompt" aria-label="要輸入的英文句子"></p>
+            <p class="typing-translation" id="typing-translation"></p>
+            <textarea id="typing-input" rows="4" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="在這裡輸入上方英文句子"></textarea>
+            <div class="typing-controls">
+              <button class="button secondary" id="typing-restart" type="button">重新開始</button>
+              <button class="button ghost" id="typing-sync-reading" type="button">同步目前閱讀文章</button>
+              <button class="button primary" id="typing-next" type="button">換一句</button>
+            </div>
+            <p class="hint" id="typing-message"></p>
+          </article>
+        </div>
+      </section>
+
+      <section class="planner" id="plan">
+        <div class="section-heading">
+          <p class="eyebrow">Daily Plan</p>
+          <h2>今日訓練菜單</h2>
+        </div>
+        <div class="task-list" id="task-list"></div>
+      </section>
+
+      <section class="progress" id="progress">
+        <div class="section-heading">
+          <p class="eyebrow">Progress</p>
+          <h2>學習儀表板</h2>
+        </div>
+        <div class="progress-layout">
+          <article class="panel calendar-panel">
+            <div class="calendar-header">
+              <div>
+                <p class="eyebrow">Check-in Wall</p>
+                <h3 id="calendar-title">本月打卡</h3>
+              </div>
+              <div class="calendar-actions">
+                <button class="icon-button" id="prev-month" type="button" aria-label="上個月" title="上個月">←</button>
+                <button class="icon-button" id="next-month" type="button" aria-label="下個月" title="下個月">→</button>
+              </div>
+            </div>
+            <p class="hint" id="calendar-summary"></p>
+            <div class="calendar-weekdays" aria-hidden="true">
+              <span>日</span>
+              <span>一</span>
+              <span>二</span>
+              <span>三</span>
+              <span>四</span>
+              <span>五</span>
+              <span>六</span>
+            </div>
+            <div class="calendar-grid" id="calendar-grid" aria-label="月曆打卡牆"></div>
+          </article>
+          <article class="panel">
+            <h3>目標分數</h3>
+            <label class="range-row">
+              <span>目前目標</span>
+              <output id="score-output">750</output>
+            </label>
+            <input id="score-goal" type="range" min="450" max="990" step="5" value="750">
+            <p class="hint" id="score-message"></p>
+          </article>
+          <article class="panel">
+            <h3>錯題提醒</h3>
+            <ul class="review-list" id="review-list"></ul>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>TOEIC Sprint</span>
+      <span>Local-first English study website</span>
+    </footer>
+
+    <nav class="mobile-nav" aria-label="手機快速導覽">
+      <a href="#practice">練習</a>
+      <a href="#plan">計畫</a>
+      <a href="#progress">進度</a>
+    </nav>
+
+    <script src="app.js"></script>
+  </body>
+</html>

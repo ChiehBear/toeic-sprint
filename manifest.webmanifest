@@ -1,0 +1,17 @@
+{
+  "name": "TOEIC Sprint",
+  "short_name": "TOEIC Sprint",
+  "description": "多益英文自學練習網站，支援手機瀏覽器操作、閱讀、單字卡、英打與打卡牆。",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f6f4",
+  "theme_color": "#17324d",
+  "icons": [
+    {
+      "src": "assets/hero-study.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
