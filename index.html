@@ -3,239 +3,229 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#17324d">
-    <meta name="description" content="TOEIC Sprint 是可在手機瀏覽器使用的多益英文自學練習網站。">
-    <title>TOEIC Sprint | 英文自學練習站</title>
-    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#18324a">
+    <meta name="description" content="以 K-pop 歌曲情境學習韓文字母、發音、單字與歌詞理解的初心者韓語網站。">
+    <title>Hangeul Beat | 韓語跟唱學習站</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#top" aria-label="TOEIC Sprint 首頁">
-        <span class="brand-mark">TS</span>
-        <span><strong>TOEIC Sprint</strong><small>Daily English Lab</small></span>
+      <a class="brand" href="#top" aria-label="Hangeul Beat 首頁">
+        <span class="brand-mark">한</span>
+        <span><strong>Hangeul Beat</strong><small>K-pop Korean Lab</small></span>
       </a>
       <nav class="main-nav" aria-label="主要導覽">
-        <a href="#practice">練習</a>
-        <a href="#plan">計畫</a>
+        <a href="#learn">學習</a>
+        <a href="#songs">歌曲</a>
+        <a href="#lyrics">歌詞工具</a>
         <a href="#progress">進度</a>
       </nav>
-      <a class="button nav-cta" href="#practice">開始</a>
+      <a class="button compact primary" href="#learn">오늘 시작</a>
     </header>
 
     <main id="top">
       <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">TOEIC 800-level self-study system</p>
-          <h1>把多益 800 分準備變成每天 25 分鐘的穩定練習</h1>
-          <p class="lead">針對中高階程度，訓練閱讀速度、商務字彙、句構精準度與錯題回顧。</p>
-          <div class="hero-chips" aria-label="學習功能">
-            <span>800 分目標</span>
-            <span>閱讀點字翻譯</span>
-            <span>英打同步文章</span>
-            <span>月曆打卡</span>
+          <p class="eyebrow">Korean from zero, through music</p>
+          <h1>從看懂 한글，到直覺跟唱韓語歌詞</h1>
+          <p class="lead">以 SEVENTEEN 歌曲情境建立韓文字母、音節拆解、發音節奏與核心單字能力，為完全初心者設計。</p>
+          <div class="hero-chips" aria-label="學習特色">
+            <span>零基礎韓文字母</span>
+            <span>音節拆解</span>
+            <span>歌曲情境單字</span>
+            <span>貼上歌詞練習</span>
           </div>
           <div class="hero-actions">
-            <a class="button primary" href="#practice">開始練習</a>
-            <a class="button ghost" href="#plan">安排今日任務</a>
+            <a class="button primary" href="#learn">開始今日課程</a>
+            <a class="button ghost" href="#lyrics">貼上歌詞練習</a>
           </div>
         </div>
         <figure class="hero-media">
-          <img src="assets/hero-study.png" alt="英文學習桌面，包含筆電、耳機、筆記與單字卡">
+          <img src="assets/hero-korean.png" alt="韓語字母筆記、耳機與舞台燈光組成的音樂學習畫面">
         </figure>
       </section>
 
       <section class="stats" aria-label="學習概覽">
-        <div>
-          <strong id="stat-days">0</strong>
-          <span>完成天數</span>
-        </div>
-        <div>
-          <strong id="stat-score">0%</strong>
-          <span>答題正確率</span>
-        </div>
-        <div>
-          <strong id="stat-words">0</strong>
-          <span>已熟單字</span>
-        </div>
-        <div>
-          <strong id="stat-streak">0</strong>
-          <span>連續學習</span>
-        </div>
-        <div>
-          <strong id="stat-wpm">0</strong>
-          <span>最佳 WPM</span>
-        </div>
+        <div><strong id="stat-letters">0</strong><span>已認識字母</span></div>
+        <div><strong id="stat-words">0</strong><span>已熟悉單字</span></div>
+        <div><strong id="stat-lines">0</strong><span>跟唱句數</span></div>
+        <div><strong id="stat-days">0</strong><span>打卡天數</span></div>
       </section>
 
-      <section class="workbench" id="practice">
+      <section class="learning-section" id="learn">
         <div class="section-heading">
-          <p class="eyebrow">Practice Desk</p>
-          <h2>練習工作台</h2>
-          <p>題庫、閱讀、單字卡與打字練習集中在同一個位置；今日題組會依日期自動輪替。</p>
+          <p class="eyebrow">Beginner path</p>
+          <h2>韓語學習工作台</h2>
+          <p>先認字母，再拆音節，最後把讀音放進歌曲節奏。所有練習都可重複點擊聆聽。</p>
         </div>
 
-        <div class="workbench-shell">
-          <div class="tabs" role="tablist" aria-label="練習類型">
-            <button class="tab-button active" id="tab-quiz" type="button" role="tab" aria-controls="pane-quiz" aria-selected="true" data-tab="quiz">題庫</button>
-            <button class="tab-button" id="tab-reading" type="button" role="tab" aria-controls="pane-reading" aria-selected="false" data-tab="reading">閱讀</button>
-            <button class="tab-button" id="tab-vocab" type="button" role="tab" aria-controls="pane-vocab" aria-selected="false" data-tab="vocab">單字卡</button>
-            <button class="tab-button" id="tab-typing" type="button" role="tab" aria-controls="pane-typing" aria-selected="false" data-tab="typing">打字練習</button>
+        <div class="workspace">
+          <div class="tabs" role="tablist" aria-label="韓語學習模式">
+            <button class="tab-button active" type="button" role="tab" data-tab="hangul" aria-selected="true">한글 字母</button>
+            <button class="tab-button" type="button" role="tab" data-tab="syllable" aria-selected="false">音節拆解</button>
+            <button class="tab-button" type="button" role="tab" data-tab="vocab" aria-selected="false">歌曲單字</button>
           </div>
 
-          <article class="panel quiz-panel practice-pane active" id="pane-quiz" role="tabpanel" aria-labelledby="tab-quiz">
+          <article class="panel learning-pane active" id="pane-hangul">
             <div class="pane-heading">
-              <p class="eyebrow">Question Bank</p>
-              <h3>多益迷你題庫</h3>
+              <div>
+                <p class="eyebrow">Step 1</p>
+                <h3>先聽懂字母的聲音</h3>
+              </div>
+              <div class="segmented" role="group" aria-label="字母類型">
+                <button class="segment active" type="button" data-letter-mode="consonants">子音</button>
+                <button class="segment" type="button" data-letter-mode="vowels">母音</button>
+              </div>
             </div>
-            <div class="quiz-meta">
-              <span><b id="question-index">1</b>/<b id="question-total">6</b></span>
-            </div>
-            <h3 id="question-text"></h3>
-            <div class="answers" id="answers"></div>
-            <div class="feedback" id="feedback" aria-live="polite"></div>
-            <div class="quiz-controls">
-              <button class="icon-button" id="prev-question" type="button" aria-label="上一題" title="上一題">←</button>
-              <button class="button primary" id="next-question" type="button">下一題</button>
+            <div class="hangul-layout">
+              <div class="hangul-grid" id="hangul-grid"></div>
+              <aside class="letter-detail">
+                <span class="detail-label">目前字母</span>
+                <strong id="letter-symbol">ㄱ</strong>
+                <h4 id="letter-name"></h4>
+                <p id="letter-sound"></p>
+                <p class="example-line" id="letter-example"></p>
+                <button class="button secondary" id="speak-letter" type="button">播放發音</button>
+              </aside>
             </div>
           </article>
 
-          <article class="panel reading-panel practice-pane" id="pane-reading" role="tabpanel" aria-labelledby="tab-reading" hidden>
+          <article class="panel learning-pane" id="pane-syllable" hidden>
             <div class="pane-heading">
-              <p class="eyebrow">Reading</p>
-              <h3>多益閱讀與時事短文</h3>
-            </div>
-            <div class="reading-layout">
-              <aside class="reading-list" id="reading-list" aria-label="閱讀文章列表"></aside>
-              <div class="reading-main">
-                <div class="reading-meta">
-                  <span id="reading-type"></span>
-                  <span id="reading-level"></span>
-                </div>
-                <h3 id="reading-title"></h3>
-                <div class="reading-passage" id="reading-passage"></div>
-                <div class="word-note" id="word-note" aria-live="polite">
-                  點擊文章中的英文單字，這裡會顯示繁體中文解釋。
-                </div>
-                <div class="reading-question">
-                  <h4 id="reading-question"></h4>
-                  <div class="answers" id="reading-answers"></div>
-                  <div class="feedback" id="reading-feedback" aria-live="polite"></div>
-                </div>
+              <div>
+                <p class="eyebrow">Step 2</p>
+                <h3>把方塊字拆成可以唱的聲音</h3>
               </div>
+            </div>
+            <div class="word-picker" id="word-picker"></div>
+            <div class="syllable-focus">
+              <div>
+                <span class="detail-label">練習單字</span>
+                <strong class="korean-word" id="syllable-word"></strong>
+                <p id="syllable-romanization"></p>
+              </div>
+              <button class="icon-button speak-button" id="speak-word" type="button" aria-label="播放單字" title="播放單字">▶</button>
+            </div>
+            <div class="syllable-blocks" id="syllable-blocks"></div>
+            <div class="meaning-panel">
+              <div><span>中文意思</span><strong id="syllable-meaning"></strong></div>
+              <div><span>發音提示</span><strong id="syllable-tip"></strong></div>
             </div>
           </article>
 
-          <article class="panel vocab-panel practice-pane" id="pane-vocab" role="tabpanel" aria-labelledby="tab-vocab" hidden>
+          <article class="panel learning-pane" id="pane-vocab" hidden>
             <div class="pane-heading">
-              <p class="eyebrow">Vocabulary</p>
-              <h3>高頻單字卡</h3>
-            </div>
-            <div class="vocab-card" id="vocab-card" role="button" tabindex="0" aria-label="翻開單字卡">
               <div>
-                <span class="tag" id="vocab-category"></span>
-                <h3 id="vocab-word"></h3>
-                <p id="vocab-phonetic"></p>
-              </div>
-              <p id="vocab-meaning"></p>
-              <div class="vocab-details" id="vocab-details"></div>
-            </div>
-            <div class="card-controls">
-              <button class="icon-button" id="prev-word" type="button" aria-label="上一張" title="上一張">←</button>
-              <button class="button secondary" id="known-word" type="button">我會了</button>
-              <button class="icon-button" id="next-word" type="button" aria-label="下一張" title="下一張">→</button>
-            </div>
-          </article>
-
-          <article class="panel typing-panel practice-pane" id="pane-typing" role="tabpanel" aria-labelledby="tab-typing" hidden>
-            <div class="pane-heading">
-              <p class="eyebrow">Typing</p>
-              <h3>英文打字練習</h3>
-            </div>
-            <div class="typing-meta" aria-label="打字成績">
-              <div>
-                <strong id="typing-wpm">0</strong>
-                <span>WPM</span>
-              </div>
-              <div>
-                <strong id="typing-accuracy">100%</strong>
-                <span>正確率</span>
-              </div>
-              <div>
-                <strong id="typing-time">0s</strong>
-                <span>時間</span>
+                <p class="eyebrow">Step 3</p>
+                <h3>歌曲情境核心單字</h3>
               </div>
             </div>
-            <p class="typing-source" id="typing-source"></p>
-            <p class="typing-prompt" id="typing-prompt" aria-label="要輸入的英文句子"></p>
-            <p class="typing-translation" id="typing-translation"></p>
-            <textarea id="typing-input" rows="4" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="在這裡輸入上方英文句子"></textarea>
-            <div class="typing-controls">
-              <button class="button secondary" id="typing-restart" type="button">重新開始</button>
-              <button class="button ghost" id="typing-sync-reading" type="button">同步目前閱讀文章</button>
-              <button class="button primary" id="typing-next" type="button">換一句</button>
-            </div>
-            <p class="hint" id="typing-message"></p>
+            <div class="vocab-grid" id="vocab-grid"></div>
           </article>
         </div>
       </section>
 
-      <section class="planner" id="plan">
+      <section class="song-section" id="songs">
         <div class="section-heading">
-          <p class="eyebrow">Daily Plan</p>
-          <h2>今日訓練菜單</h2>
+          <p class="eyebrow">Song missions</p>
+          <h2>SEVENTEEN 歌曲學習路線</h2>
+          <p>以歌曲主題與語感安排課程，不直接收錄完整受版權保護歌詞。</p>
         </div>
-        <div class="task-list" id="task-list"></div>
+        <div class="song-layout">
+          <div class="song-list" id="song-list"></div>
+          <article class="panel song-lesson">
+            <div class="song-lesson-heading">
+              <div>
+                <span class="song-level" id="song-level"></span>
+                <h3 id="song-title"></h3>
+                <p id="song-focus"></p>
+              </div>
+              <button class="icon-button speak-button" id="speak-practice-line" type="button" aria-label="播放練習句" title="播放練習句">▶</button>
+            </div>
+            <div class="practice-line">
+              <span>原創跟唱練習句</span>
+              <strong id="song-practice-korean"></strong>
+              <p id="song-practice-reading"></p>
+              <p id="song-practice-meaning"></p>
+            </div>
+            <div class="lesson-points" id="lesson-points"></div>
+            <button class="button primary" id="complete-song-lesson" type="button">完成這堂歌曲課</button>
+          </article>
+        </div>
       </section>
 
-      <section class="progress" id="progress">
+      <section class="lyrics-section" id="lyrics">
         <div class="section-heading">
-          <p class="eyebrow">Progress</p>
-          <h2>學習儀表板</h2>
+          <p class="eyebrow">Your lyric practice</p>
+          <h2>貼上歌詞，逐行練讀</h2>
+          <p>將你合法取得的歌詞貼入。網站只在你的瀏覽器中處理，不會上傳或儲存在伺服器。</p>
+        </div>
+        <div class="lyrics-layout">
+          <article class="panel lyric-input-panel">
+            <label for="lyrics-input">韓語歌詞</label>
+            <textarea id="lyrics-input" rows="9" placeholder="在這裡貼上想練習的韓語歌詞…"></textarea>
+            <div class="input-actions">
+              <button class="button primary" id="analyze-lyrics" type="button">拆解歌詞</button>
+              <button class="button ghost" id="clear-lyrics" type="button">清除</button>
+            </div>
+            <p class="copyright-note">請勿公開分享完整歌詞；本工具僅供個人學習。</p>
+          </article>
+          <article class="panel lyric-result-panel">
+            <div class="lyric-result-header">
+              <h3>逐行發音</h3>
+              <span id="lyrics-count">0 行</span>
+            </div>
+            <div class="lyric-lines" id="lyric-lines">
+              <div class="empty-state">貼上歌詞後，這裡會顯示韓文、近似羅馬拼音與播放按鈕。</div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="daily-section" id="progress">
+        <div class="section-heading">
+          <p class="eyebrow">Daily rhythm</p>
+          <h2>今日任務與打卡</h2>
         </div>
         <div class="progress-layout">
+          <article class="panel task-panel">
+            <h3>今天練 15 分鐘</h3>
+            <div class="task-list" id="task-list"></div>
+          </article>
           <article class="panel calendar-panel">
             <div class="calendar-header">
               <div>
-                <p class="eyebrow">Check-in Wall</p>
-                <h3 id="calendar-title">本月打卡</h3>
+                <span class="detail-label">Check-in</span>
+                <h3 id="calendar-title"></h3>
               </div>
               <div class="calendar-actions">
-                <button class="icon-button" id="prev-month" type="button" aria-label="上個月" title="上個月">←</button>
-                <button class="icon-button" id="next-month" type="button" aria-label="下個月" title="下個月">→</button>
+                <button class="icon-button" id="prev-month" type="button" aria-label="上個月">←</button>
+                <button class="icon-button" id="next-month" type="button" aria-label="下個月">→</button>
               </div>
             </div>
             <p class="hint" id="calendar-summary"></p>
             <div class="calendar-weekdays" aria-hidden="true">
-              <span>日</span>
-              <span>一</span>
-              <span>二</span>
-              <span>三</span>
-              <span>四</span>
-              <span>五</span>
-              <span>六</span>
+              <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
             </div>
-            <div class="calendar-grid" id="calendar-grid" aria-label="月曆打卡牆"></div>
-          </article>
-          <article class="panel">
-            <h3>錯題提醒</h3>
-            <ul class="review-list" id="review-list"></ul>
+            <div class="calendar-grid" id="calendar-grid"></div>
           </article>
         </div>
       </section>
     </main>
 
     <footer class="footer">
-      <span>TOEIC Sprint</span>
-      <span>Local-first English study website</span>
+      <span>Hangeul Beat</span>
+      <span>非官方粉絲學習工具，未與藝人或經紀公司合作。</span>
     </footer>
 
     <nav class="mobile-nav" aria-label="手機快速導覽">
-      <a href="#practice">練習</a>
-      <a href="#plan">計畫</a>
+      <a href="#learn">字母</a>
+      <a href="#songs">歌曲</a>
+      <a href="#lyrics">歌詞</a>
       <a href="#progress">進度</a>
     </nav>
 

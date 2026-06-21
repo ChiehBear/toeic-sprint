@@ -1,571 +1,316 @@
-const questions = [
-  {
-    type: "Part 5",
-    text: "The sales report must be submitted _____ Friday afternoon.",
-    options: ["by", "during", "since", "while"],
-    answer: 0,
-    explanation: "by 表示期限，在星期五下午以前要提交。",
-    optionExplanations: [
-      "by 正確，表示不晚於某個期限。",
-      "during 錯，表示某段期間內發生，不能用來標示提交期限。",
-      "since 錯，表示自從某時間點開始，不符合 deadline 語意。",
-      "while 錯，表示當某事正在發生時，後面通常接子句。"
-    ]
-  },
-  {
-    type: "Part 5",
-    text: "Our customer service team responds to inquiries as _____ as possible.",
-    options: ["quick", "quickly", "quicker", "quickness"],
-    answer: 1,
-    explanation: "修飾動詞 responds 要用副詞 quickly。",
-    optionExplanations: [
-      "quick 錯，是形容詞，不能直接修飾 responds。",
-      "quickly 正確，副詞修飾動詞 responds。",
-      "quicker 錯，是比較級形容詞/副詞，句型 as ... as possible 需要原級。",
-      "quickness 錯，是名詞，不能放在這個位置修飾動作。"
-    ]
-  },
-  {
-    type: "Vocabulary",
-    text: "The company will _____ its new refund policy next month.",
-    options: ["implement", "occur", "attend", "repair"],
-    answer: 0,
-    explanation: "implement 是實施、執行政策或計畫。",
-    optionExplanations: [
-      "implement 正確，常搭配 policy、plan、procedure，表示實施。",
-      "occur 錯，表示發生，通常是不及物動詞，不能直接接 policy。",
-      "attend 錯，表示出席，常接 meeting、conference。",
-      "repair 錯，表示修理，通常接設備或物品，不接政策。"
-    ]
-  },
-  {
-    type: "Reading",
-    text: "Notice: The cafeteria will be closed from 2 p.m. to 4 p.m. for maintenance. What should employees do?",
-    options: ["Submit a report", "Use the cafeteria earlier", "Call maintenance", "Cancel lunch orders"],
-    answer: 1,
-    explanation: "公告指出 2 到 4 點關閉，因此員工應提早使用餐廳。",
-    optionExplanations: [
-      "Submit a report 錯，公告沒有提到提交報告。",
-      "Use the cafeteria earlier 正確，餐廳 2 到 4 點關閉，所以要提早使用。",
-      "Call maintenance 錯，maintenance 是關閉原因，不是要求員工聯絡維修。",
-      "Cancel lunch orders 錯，公告沒有說要取消午餐訂單。"
-    ]
-  },
-  {
-    type: "Part 5",
-    text: "All applicants are required to attach a copy of _____ resume.",
-    options: ["they", "them", "their", "theirs"],
-    answer: 2,
-    explanation: "resume 是名詞，要用所有格形容詞 their。",
-    optionExplanations: [
-      "they 錯，是主詞代名詞，不能放在名詞 resume 前面。",
-      "them 錯，是受詞代名詞，不能修飾名詞。",
-      "their 正確，是所有格形容詞，可修飾 resume。",
-      "theirs 錯，是所有格代名詞，後面不能再接名詞 resume。"
-    ]
-  },
-  {
-    type: "Listening",
-    text: "You hear: The train to Taichung has been delayed due to track maintenance. What is the problem?",
-    options: ["A meeting is canceled", "A train is late", "A ticket is missing", "A station is closed"],
-    answer: 1,
-    explanation: "has been delayed 表示列車誤點。",
-    optionExplanations: [
-      "A meeting is canceled 錯，句子談的是 train，不是 meeting。",
-      "A train is late 正確，has been delayed 表示列車延誤。",
-      "A ticket is missing 錯，沒有提到 ticket 遺失。",
-      "A station is closed 錯，maintenance 是軌道維修，不是車站關閉。"
-    ]
-  }
-];
-
-const vocab = [
-  {
-    word: "agenda",
-    phonetic: "/e-jen-duh/",
-    category: "Meeting",
-    meaning: "議程；會議要討論的事項",
-    example: "Please review the agenda before tomorrow's meeting.",
-    scene: "開會前寄通知、安排會議流程、確認討論項目時常用。"
-  },
-  {
-    word: "invoice",
-    phonetic: "/in-voys/",
-    category: "Business",
-    meaning: "發票；帳單",
-    example: "The invoice will be sent to your accounting department today.",
-    scene: "付款、報帳、採購、與客戶確認費用時常見。"
-  },
-  {
-    word: "confirm",
-    phonetic: "/kun-furm/",
-    category: "Email",
-    meaning: "確認；證實",
-    example: "Could you confirm your attendance by Friday afternoon?",
-    scene: "email 中確認會議、訂位、出席、時程或資料是否正確。"
-  },
-  {
-    word: "policy",
-    phonetic: "/pol-uh-see/",
-    category: "Office",
-    meaning: "政策；規定",
-    example: "The company has updated its refund policy.",
-    scene: "公司制度、人資公告、退款規定、保固條款與辦公室規範常用。"
-  },
-  {
-    word: "available",
-    phonetic: "/uh-vay-luh-bul/",
-    category: "Schedule",
-    meaning: "有空的；可取得的",
-    example: "The conference room is available after 3 p.m.",
-    scene: "詢問時間、會議室、商品庫存、服務是否可用時很常見。"
-  },
-  {
-    word: "estimate",
-    phonetic: "/es-tuh-mayt/",
-    category: "Project",
-    meaning: "估計；估價",
-    example: "The contractor provided an estimate for the repair work.",
-    scene: "專案成本、工期、維修報價、出貨時間預估時會出現。"
-  }
-];
-
-const typingPrompts = [
-  {
-    readingIndex: 0,
-    sourceTitle: "Office Renovation Notice",
-    english: "Beginning next Monday, the accounting department will temporarily move to the third floor while its office is being renovated.",
-    translation: "從下週一開始，會計部門在辦公室整修期間會暫時搬到三樓。"
-  },
-  {
-    readingIndex: 0,
-    sourceTitle: "Office Renovation Notice",
-    english: "Employees who need reimbursement forms should submit requests through the internal portal before noon.",
-    translation: "需要報銷表單的員工應在中午前透過內部入口網站提交申請。"
-  },
-  {
-    readingIndex: 1,
-    sourceTitle: "Client Meeting Follow-up",
-    english: "Thank you for attending yesterday's product demonstration.",
-    translation: "感謝您參加昨天的產品展示。"
-  },
-  {
-    readingIndex: 1,
-    sourceTitle: "Client Meeting Follow-up",
-    english: "The updated document will include installation fees, optional training, and estimated shipping dates.",
-    translation: "更新後的文件會包含安裝費、選用訓練以及預估出貨日期。"
-  },
-  {
-    readingIndex: 2,
-    sourceTitle: "Companies Test Shorter Meetings",
-    english: "Several technology companies are testing shorter meeting formats to improve employee focus and reduce schedule fatigue.",
-    translation: "幾家科技公司正在測試較短的會議形式，以提升員工專注力並減少行程疲勞。"
-  },
-  {
-    readingIndex: 3,
-    sourceTitle: "Airlines Expand Digital Check-in",
-    english: "Passengers can upload travel documents, choose seats, and receive boarding passes through a mobile application before arriving at the airport.",
-    translation: "乘客可以在抵達機場前，透過手機應用程式上傳旅行文件、選位並取得登機證。"
-  }
-];
-
-const readingPassages = [
-  {
-    type: "TOEIC-style",
-    level: "Business Notice",
-    title: "Office Renovation Notice",
-    paragraphs: [
-      "Beginning next Monday, the accounting department will temporarily move to the third floor while its office is being renovated.",
-      "Employees who need reimbursement forms should submit requests through the internal portal before noon. Printed forms will not be available during the renovation period.",
-      "The facilities team expects the project to be completed by June 28, and regular office access will resume the following business day."
-    ],
-    question: "What should employees do if they need reimbursement forms?",
-    options: ["Visit the accounting office", "Use the internal portal", "Wait until June 28", "Call the facilities team"],
-    answer: 1,
-    explanation: "文章說需要報銷表單的人應該在中午前透過 internal portal 提交請求。"
-  },
-  {
-    type: "TOEIC-style",
-    level: "Email",
-    title: "Client Meeting Follow-up",
-    paragraphs: [
-      "Thank you for attending yesterday's product demonstration. Our team appreciated your questions about delivery schedules and warranty coverage.",
-      "As discussed, we will send a revised quotation by Friday afternoon. The updated document will include installation fees, optional training, and estimated shipping dates.",
-      "Please review the quotation carefully and let us know whether your purchasing department requires any additional documents."
-    ],
-    question: "What will be included in the revised quotation?",
-    options: ["A cafeteria menu", "Installation fees", "Employee resumes", "A parking permit"],
-    answer: 1,
-    explanation: "revised quotation 會包含 installation fees、optional training 與 estimated shipping dates。"
-  },
-  {
-    type: "News Brief",
-    level: "Workplace Trend",
-    title: "Companies Test Shorter Meetings",
-    paragraphs: [
-      "Several technology companies are testing shorter meeting formats to improve employee focus and reduce schedule fatigue.",
-      "Under the new policy, routine updates are limited to fifteen minutes, while project decisions are shared in a written summary after each meeting.",
-      "Managers say the approach encourages clearer agendas and gives employees more time for concentrated work."
-    ],
-    question: "Why are companies testing shorter meetings?",
-    options: ["To reduce focus", "To improve employee focus", "To cancel project decisions", "To remove written summaries"],
-    answer: 1,
-    explanation: "新聞短文第一段提到 shorter meeting formats 是為了 improve employee focus 和 reduce schedule fatigue。"
-  },
-  {
-    type: "News Brief",
-    level: "Travel",
-    title: "Airlines Expand Digital Check-in",
-    paragraphs: [
-      "More airlines are expanding digital check-in services as travelers expect faster airport procedures.",
-      "Passengers can upload travel documents, choose seats, and receive boarding passes through a mobile application before arriving at the airport.",
-      "Airport staff say the system may shorten lines, but travelers should still arrive early during peak holiday periods."
-    ],
-    question: "What can passengers receive through the mobile application?",
-    options: ["Boarding passes", "Hotel keys", "Refund checks", "Printed magazines"],
-    answer: 0,
-    explanation: "第二段說 passengers 可以透過 mobile application receive boarding passes。"
-  }
-];
-
-const wordDefinitions = {
-  accounting: "會計；會計部門。例：the accounting department 會計部門。",
-  additional: "額外的；附加的。常用於 documents, information, fees。",
-  agendas: "議程；會議安排。clearer agendas 表示更清楚的會議議程。",
-  airlines: "航空公司。",
-  airport: "機場。",
-  application: "應用程式；申請。mobile application 是手機 App。",
-  appreciated: "感謝；欣賞。商務信常見：We appreciated your questions.",
-  arriving: "抵達。before arriving at the airport 是抵達機場前。",
-  attending: "參加；出席。",
-  available: "可取得的；有空的。",
-  boarding: "登機。boarding pass 是登機證。",
-  business: "商務；營業。",
-  cafeteria: "員工餐廳；自助餐廳。",
-  check: "檢查；辦理手續。check-in 是報到、登機報到。",
-  client: "客戶；委託人。",
-  companies: "公司，company 的複數。",
-  completed: "完成的。",
-  concentrated: "專注的；集中的。concentrated work 是專心工作的時間。",
-  coverage: "保障範圍；報導範圍。warranty coverage 是保固範圍。",
-  decisions: "決策；決定。",
-  delivery: "交付；配送。",
-  demonstration: "展示；示範。product demonstration 是產品展示。",
-  department: "部門。",
-  digital: "數位的。",
-  discussed: "討論過的。as discussed 表示如先前討論。",
-  document: "文件。",
-  documents: "文件，document 的複數。",
-  employee: "員工。",
-  employees: "員工，employee 的複數。",
-  encourages: "鼓勵；促進。",
-  estimated: "估計的；預估的。",
-  expects: "預期；期待。",
-  expand: "擴大；拓展。",
-  expanding: "正在擴大；正在拓展。",
-  facilities: "設施；總務。facilities team 可指總務或設備團隊。",
-  fatigue: "疲勞。schedule fatigue 是行程過滿造成的疲勞。",
-  fees: "費用。",
-  fifteen: "十五。",
-  focus: "專注；焦點。",
-  following: "接下來的；下列的。",
-  formats: "形式；格式。",
-  holiday: "假日。",
-  improve: "改善；提升。",
-  include: "包含。",
-  installation: "安裝。",
-  internal: "內部的。",
-  limited: "受限制的；有限的。",
-  managers: "經理；主管。",
-  meeting: "會議。",
-  mobile: "行動的；手機的。",
-  optional: "可選的；非必要的。",
-  passengers: "乘客。",
-  peak: "高峰的；尖峰的。peak holiday periods 是假期尖峰時段。",
-  period: "期間；時段。",
-  policy: "政策；規定。",
-  portal: "入口網站；系統入口。internal portal 是公司內部系統。",
-  procedures: "程序；手續。",
-  product: "產品。",
-  project: "專案。",
-  purchasing: "採購。purchasing department 是採購部門。",
-  questions: "問題；詢問。",
-  quotation: "報價單。",
-  reduce: "減少；降低。",
-  refund: "退款。",
-  regular: "例行的；一般的。",
-  reimbursement: "報銷；費用補償。",
-  renovated: "翻新的；整修過的。",
-  renovation: "整修；翻新。",
-  requests: "請求；申請。",
-  requires: "需要；要求。",
-  resume: "恢復；履歷。本文中 resume 是恢復。",
-  revised: "修訂過的。",
-  routine: "例行的。",
-  schedules: "時程；時間表。",
-  services: "服務。",
-  shipping: "運送；出貨。",
-  shorter: "較短的。",
-  staff: "員工；工作人員。",
-  submit: "提交。",
-  summary: "摘要；總結。",
-  temporarily: "暫時地。",
-  technology: "科技。",
-  travelers: "旅客。",
-  warranty: "保固。",
-  written: "書面的；寫成文字的"
+const hangul = {
+  consonants: [
+    { symbol: "ㄱ", name: "기역 giyeok", sound: "介於 g / k，字首較輕。", example: "가수 gasu｜歌手" },
+    { symbol: "ㄴ", name: "니은 nieun", sound: "像英文 n。", example: "노래 norae｜歌曲" },
+    { symbol: "ㄷ", name: "디귿 digeut", sound: "介於 d / t。", example: "달 dal｜月亮" },
+    { symbol: "ㄹ", name: "리을 rieul", sound: "介於 r / l，舌尖快速輕彈。", example: "리듬 rideum｜節奏" },
+    { symbol: "ㅁ", name: "미음 mieum", sound: "像英文 m。", example: "마음 maeum｜心" },
+    { symbol: "ㅂ", name: "비읍 bieup", sound: "介於 b / p。", example: "빛 bit｜光" },
+    { symbol: "ㅅ", name: "시옷 siot", sound: "像 s；遇到 ㅣ 時接近 sh。", example: "사랑 sarang｜愛" },
+    { symbol: "ㅇ", name: "이응 ieung", sound: "字首不發音，字尾發 ng。", example: "음악 eumak｜音樂" },
+    { symbol: "ㅈ", name: "지읒 jieut", sound: "介於 j / ch。", example: "지금 jigeum｜現在" },
+    { symbol: "ㅊ", name: "치읓 chieut", sound: "送氣的 ch。", example: "친구 chingu｜朋友" },
+    { symbol: "ㅋ", name: "키읔 kieuk", sound: "送氣的 k。", example: "코 ko｜鼻子" },
+    { symbol: "ㅌ", name: "티읕 tieut", sound: "送氣的 t。", example: "토요일 toyoil｜星期六" },
+    { symbol: "ㅍ", name: "피읖 pieup", sound: "送氣的 p。", example: "파도 pado｜海浪" },
+    { symbol: "ㅎ", name: "히읗 hieut", sound: "像英文 h。", example: "하늘 haneul｜天空" }
+  ],
+  vowels: [
+    { symbol: "ㅏ", name: "아 a", sound: "像中文「啊」。", example: "나 na｜我" },
+    { symbol: "ㅑ", name: "야 ya", sound: "像「呀」。", example: "야구 yagu｜棒球" },
+    { symbol: "ㅓ", name: "어 eo", sound: "嘴巴張開，近似「喔」但更後方。", example: "너 neo｜你" },
+    { symbol: "ㅕ", name: "여 yeo", sound: "在 eo 前加 y。", example: "여기 yeogi｜這裡" },
+    { symbol: "ㅗ", name: "오 o", sound: "圓唇的 o。", example: "오늘 oneul｜今天" },
+    { symbol: "ㅛ", name: "요 yo", sound: "在 o 前加 y。", example: "요리 yori｜料理" },
+    { symbol: "ㅜ", name: "우 u", sound: "像中文「嗚」。", example: "우리 uri｜我們" },
+    { symbol: "ㅠ", name: "유 yu", sound: "像英文 you。", example: "유리 yuri｜玻璃" },
+    { symbol: "ㅡ", name: "으 eu", sound: "嘴唇放平，聲音從喉嚨後方發出。", example: "음악 eumak｜音樂" },
+    { symbol: "ㅣ", name: "이 i", sound: "像中文「衣」。", example: "이름 ireum｜名字" },
+    { symbol: "ㅐ", name: "애 ae", sound: "接近英文 e。", example: "내 nae｜我的" },
+    { symbol: "ㅔ", name: "에 e", sound: "現代口語與 ㅐ 很接近。", example: "세상 sesang｜世界" }
+  ]
 };
 
-const tasks = [
-  { id: "listen", title: "聽力 10 分鐘", detail: "跟讀商務對話並記下關鍵字" },
-  { id: "vocab", title: "單字 12 個", detail: "複習高頻商務與辦公字彙" },
-  { id: "reading", title: "閱讀 1 篇", detail: "點單字看繁中解釋並完成題目" },
-  { id: "typing", title: "打字 5 分鐘", detail: "精準輸入多益常見職場句子" },
-  { id: "grammar", title: "文法 6 題", detail: "主攻介系詞、時態、詞性" },
-  { id: "review", title: "錯題回顧", detail: "重新說明錯題為什麼錯" }
+const syllableWords = [
+  { word: "사랑", romanization: "sa-rang", meaning: "愛", tip: "랑 的尾音 ㅇ 是 ng。", parts: ["ㅅ + ㅏ = 사 (sa)", "ㄹ + ㅏ + ㅇ = 랑 (rang)"] },
+  { word: "음악", romanization: "eu-mak", meaning: "音樂", tip: "ㅡ 的嘴唇要放平；악 的尾音 ㄱ 收住。", parts: ["ㅇ + ㅡ + ㅁ = 음 (eum)", "ㅇ + ㅏ + ㄱ = 악 (ak)"] },
+  { word: "오늘", romanization: "o-neul", meaning: "今天", tip: "늘 的 ㅡ 不要念成 u。", parts: ["ㅇ + ㅗ = 오 (o)", "ㄴ + ㅡ + ㄹ = 늘 (neul)"] },
+  { word: "꿈", romanization: "kkum", meaning: "夢想", tip: "ㄲ 是緊音，起音短而有力。", parts: ["ㄲ + ㅜ + ㅁ = 꿈 (kkum)"] },
+  { word: "같이", romanization: "ga-chi", meaning: "一起", tip: "같이 實際常念成 가치，ㅌ 遇 ㅣ 產生顎化。", parts: ["ㄱ + ㅏ + ㅌ = 같 (gat)", "ㅇ + ㅣ = 이 (i) → chi"] },
+  { word: "빛", romanization: "bit", meaning: "光", tip: "尾音 ㅊ 收成 t 音，不送氣。", parts: ["ㅂ + ㅣ + ㅊ = 빛 (bit)"] }
 ];
 
-const dailyKey = getDateKey(new Date());
-const dailyQuestions = makeDailySet(questions, dailyKey, "questions");
-const dailyVocab = makeDailySet(vocab, dailyKey, "vocab");
-const dailyReadings = makeDailySet(withSourceIndex(readingPassages), dailyKey, "readings");
-const dailyTypingPrompts = makeDailySet(typingPrompts, dailyKey, "typing");
+const songVocabulary = [
+  { word: "아주", reading: "aju", meaning: "非常、很", example: "오늘 아주 좋아요.｜今天非常好。" },
+  { word: "예쁘다", reading: "yeppeuda", meaning: "漂亮、可愛", example: "꽃이 정말 예뻐요.｜花真的很漂亮。" },
+  { word: "박수", reading: "baksu", meaning: "掌聲、拍手", example: "같이 박수 쳐요.｜一起拍手吧。" },
+  { word: "울다", reading: "ulda", meaning: "哭", example: "오늘은 울지 않아요.｜今天不哭。" },
+  { word: "손오공", reading: "sonogong", meaning: "孫悟空", example: "힘이 아주 강해요.｜力量非常強。" },
+  { word: "음악", reading: "eumak", meaning: "音樂", example: "음악을 매일 들어요.｜每天聽音樂。" }
+];
 
-const state = JSON.parse(localStorage.getItem("toeicSprintState") || "{}");
-state.answers ||= {};
-state.knownWords ||= [];
+const songLessons = [
+  {
+    title: "아주 NICE",
+    level: "Level 1｜明亮節奏",
+    focus: "練習 아주、좋다，以及每拍一個音節的跟讀。",
+    korean: "오늘 기분이 아주 좋아요",
+    reading: "o-neul gi-bun-i a-ju jo-a-yo",
+    meaning: "今天心情非常好。",
+    points: [["아주", "非常、很"], ["기분", "心情"], ["좋아요", "很好、喜歡"]]
+  },
+  {
+    title: "예쁘다 (Pretty U)",
+    level: "Level 1｜描述感受",
+    focus: "練習緊音 ㅃ 與形容詞 예쁘다。",
+    korean: "웃는 모습이 정말 예뻐요",
+    reading: "un-neun mo-seub-i jeong-mal ye-ppeo-yo",
+    meaning: "笑著的樣子真的很漂亮。",
+    points: [["웃다", "笑"], ["모습", "模樣"], ["정말", "真的"]]
+  },
+  {
+    title: "박수 (CLAP)",
+    level: "Level 2｜收音節奏",
+    focus: "練習 박、같、힘 等帶 받침 的短促收音。",
+    korean: "우리 같이 힘차게 박수 쳐요",
+    reading: "u-ri ga-chi him-cha-ge bak-su chyeo-yo",
+    meaning: "我們一起有力地拍手吧。",
+    points: [["우리", "我們"], ["같이", "一起"], ["힘차게", "有力地"]]
+  },
+  {
+    title: "울고 싶지 않아",
+    level: "Level 2｜情緒句型",
+    focus: "練習 -고 싶다「想要做……」與否定 지 않다。",
+    korean: "오늘은 혼자 있고 싶지 않아요",
+    reading: "o-neu-reun hon-ja it-go sip-ji a-na-yo",
+    meaning: "今天不想一個人待著。",
+    points: [["혼자", "獨自"], ["있다", "在、存在"], ["싶지 않다", "不想要"]]
+  },
+  {
+    title: "손오공 (Super)",
+    level: "Level 2｜強拍發音",
+    focus: "練習緊音、送氣音和短句強拍。",
+    korean: "우리는 더 높이 올라가요",
+    reading: "u-ri-neun deo no-pi ol-la-ga-yo",
+    meaning: "我們往更高處前進。",
+    points: [["더", "更、再"], ["높이", "高高地"], ["올라가다", "上升"]]
+  },
+  {
+    title: "음악의 신",
+    level: "Level 2｜助詞理解",
+    focus: "練習 의「……的」與 을/를 受詞助詞。",
+    korean: "우리는 음악을 함께 즐겨요",
+    reading: "u-ri-neun eu-ma-geul ham-kke jeul-gyeo-yo",
+    meaning: "我們一起享受音樂。",
+    points: [["음악", "音樂"], ["함께", "一起"], ["즐기다", "享受"]]
+  }
+];
+
+const tasks = [
+  { id: "letters", title: "字母 5 個", detail: "點讀子音或母音" },
+  { id: "syllables", title: "音節 3 組", detail: "看拆解並播放發音" },
+  { id: "song", title: "歌曲課 1 堂", detail: "完成一個情境練習句" },
+  { id: "lyrics", title: "歌詞 2 行", detail: "貼上並逐行跟讀" }
+];
+
+const state = JSON.parse(localStorage.getItem("hangeulBeatState") || "{}");
+state.letters ||= [];
+state.words ||= [];
+state.lines ||= 0;
+state.syllables ||= [];
+state.completedSongs ||= [];
 state.tasks ||= {};
-state.goal ||= 800;
-if (state.goal === 750) {
-  state.goal = 800;
-}
-state.days ||= 0;
-state.lastCompleted ||= "";
-state.bestWpm ||= 0;
-state.completedDates ||= state.lastCompleted ? [state.lastCompleted] : [];
-state.completedDates = [...new Set(state.completedDates)];
-state.days = Math.max(state.days, state.completedDates.length);
-state.taskDate ||= dailyKey;
-if (state.taskDate !== dailyKey) {
+state.completedDates ||= [];
+state.taskDate ||= dateKey(new Date());
+
+if (state.taskDate !== dateKey(new Date())) {
   state.tasks = {};
-  state.answers = {};
-  state.taskDate = dailyKey;
+  state.taskDate = dateKey(new Date());
 }
 
-let questionIndex = 0;
-let quizCompleted = false;
-let vocabIndex = 0;
-let showingMeaning = false;
-let typingIndex = 0;
-let readingIndex = 0;
+let letterMode = "consonants";
+let letterIndex = 0;
+let syllableIndex = 0;
+let songIndex = 0;
 let calendarDate = new Date();
-let typingStart = null;
-let typingTimer = null;
 
-const save = () => localStorage.setItem("toeicSprintState", JSON.stringify(state));
+const save = () => localStorage.setItem("hangeulBeatState", JSON.stringify(state));
 
-function renderStats() {
-  const answered = Object.values(state.answers);
-  const correct = answered.filter(Boolean).length;
-  const accuracy = answered.length ? Math.round((correct / answered.length) * 100) : 0;
-  const todayDone = isTodayCompleted();
-
-  document.querySelector("#stat-days").textContent = state.completedDates.length;
-  document.querySelector("#stat-score").textContent = `${accuracy}%`;
-  document.querySelector("#stat-words").textContent = state.knownWords.length;
-  document.querySelector("#stat-streak").textContent = todayDone ? "1" : "0";
-  document.querySelector("#stat-wpm").textContent = state.bestWpm;
-}
-
-function renderQuestion() {
-  if (quizCompleted) {
-    renderQuizComplete();
+function speakKorean(text) {
+  if (!("speechSynthesis" in window)) {
     return;
   }
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "ko-KR";
+  utterance.rate = 0.72;
+  window.speechSynthesis.speak(utterance);
+}
 
-  const question = dailyQuestions[questionIndex];
-  document.querySelector("#question-index").textContent = questionIndex + 1;
-  document.querySelector("#question-total").textContent = dailyQuestions.length;
-  document.querySelector("#question-text").textContent = question.text;
+function renderStats() {
+  document.querySelector("#stat-letters").textContent = state.letters.length;
+  document.querySelector("#stat-words").textContent = state.words.length;
+  document.querySelector("#stat-lines").textContent = state.lines;
+  document.querySelector("#stat-days").textContent = state.completedDates.length;
+}
 
-  const answers = document.querySelector("#answers");
-  answers.innerHTML = "";
-  question.options.forEach((option, index) => {
+function renderHangul() {
+  const letters = hangul[letterMode];
+  const grid = document.querySelector("#hangul-grid");
+  grid.innerHTML = "";
+
+  letters.forEach((letter, index) => {
     const button = document.createElement("button");
-    button.className = "answer";
+    button.className = "letter-card";
     button.type = "button";
-    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
-    button.addEventListener("click", () => chooseAnswer(index));
-    answers.append(button);
-  });
-
-  document.querySelector("#feedback").textContent = "選一個答案後，這裡會顯示解析。";
-  document.querySelector("#prev-question").disabled = questionIndex === 0;
-  document.querySelector("#next-question").textContent = questionIndex === dailyQuestions.length - 1 ? "完成題組" : "下一題";
-  applyAnsweredState();
-}
-
-function renderQuizComplete() {
-  const answered = dailyQuestions.map((_, index) => state.answers[index]);
-  const answeredCount = answered.filter((answer) => answer !== undefined).length;
-  const correctCount = answered.filter(Boolean).length;
-  const accuracy = answeredCount ? Math.round((correctCount / answeredCount) * 100) : 0;
-
-  document.querySelector("#question-index").textContent = dailyQuestions.length;
-  document.querySelector("#question-total").textContent = dailyQuestions.length;
-  document.querySelector("#question-text").textContent = "今日迷你題庫已完成";
-  document.querySelector("#answers").innerHTML = "";
-  document.querySelector("#feedback").innerHTML = `
-    <strong>完成本日題組。</strong>
-    <p>你完成了 ${answeredCount}/${dailyQuestions.length} 題，答對 ${correctCount} 題，正確率 ${accuracy}%。</p>
-    <p>可以到錯題提醒回顧解析，或重新檢視本日題組。</p>
-  `;
-  document.querySelector("#prev-question").disabled = true;
-  document.querySelector("#next-question").textContent = "重新檢視本日題組";
-}
-
-function chooseAnswer(index) {
-  const question = dailyQuestions[questionIndex];
-  state.answers[questionIndex] = index === question.answer;
-  save();
-  applyAnsweredState(index);
-  renderStats();
-  renderReviewList();
-}
-
-function applyAnsweredState(selectedIndex = null) {
-  const question = dailyQuestions[questionIndex];
-  const buttons = [...document.querySelectorAll(".answer")];
-
-  buttons.forEach((button, index) => {
-    button.classList.toggle("selected", index === selectedIndex);
-    button.classList.toggle("correct", selectedIndex !== null && index === question.answer);
-    button.classList.toggle("wrong", selectedIndex === index && index !== question.answer);
-  });
-
-  if (selectedIndex !== null) {
-    const isCorrect = selectedIndex === question.answer;
-    document.querySelector("#feedback").innerHTML = `
-      <strong>${isCorrect ? "答對了。" : "這題要再看一次。"}</strong>
-      <p>${escapeText(question.explanation)}</p>
-      <ul class="option-explanations">
-        ${question.optionExplanations.map((explanation, index) => `
-          <li class="${index === question.answer ? "right" : "not-right"}">
-            <b>${String.fromCharCode(65 + index)}</b>
-            <span>${escapeText(explanation)}</span>
-          </li>
-        `).join("")}
-      </ul>
-    `;
-  }
-}
-
-function renderVocab() {
-  const item = dailyVocab[vocabIndex];
-  document.querySelector("#vocab-category").textContent = item.category;
-  document.querySelector("#vocab-word").textContent = item.word;
-  document.querySelector("#vocab-phonetic").textContent = item.phonetic;
-  document.querySelector("#vocab-meaning").textContent = showingMeaning ? item.meaning : "點擊卡片看中文意思";
-  document.querySelector("#vocab-details").innerHTML = showingMeaning
-    ? `
-      <div><strong>例句</strong><span>${escapeText(item.example)}</span></div>
-      <div><strong>使用情景</strong><span>${escapeText(item.scene)}</span></div>
-    `
-    : "";
-  document.querySelector("#known-word").textContent = state.knownWords.includes(item.word) ? "已熟悉" : "我會了";
-}
-
-function renderReadingList() {
-  const list = document.querySelector("#reading-list");
-  list.innerHTML = "";
-
-  dailyReadings.forEach((passage, index) => {
-    const button = document.createElement("button");
-    button.className = "reading-option";
-    button.type = "button";
-    button.innerHTML = `<strong>${passage.title}</strong><span>${passage.type}</span>`;
-    button.classList.toggle("active", index === readingIndex);
+    button.textContent = letter.symbol;
+    button.classList.toggle("active", index === letterIndex);
     button.addEventListener("click", () => {
-      readingIndex = index;
-      renderReading();
-      syncTypingToReading(false);
+      letterIndex = index;
+      if (!state.letters.includes(letter.symbol)) {
+        state.letters.push(letter.symbol);
+      }
+      state.tasks.letters = state.letters.length >= 5;
+      updateCheckIn();
+      save();
+      renderStats();
+      renderTasks();
+      renderCalendar();
+      renderHangul();
+    });
+    grid.append(button);
+  });
+
+  const current = letters[letterIndex];
+  document.querySelector("#letter-symbol").textContent = current.symbol;
+  document.querySelector("#letter-name").textContent = current.name;
+  document.querySelector("#letter-sound").textContent = current.sound;
+  document.querySelector("#letter-example").textContent = current.example;
+}
+
+function renderSyllables() {
+  const picker = document.querySelector("#word-picker");
+  picker.innerHTML = "";
+
+  syllableWords.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.className = "word-chip";
+    button.type = "button";
+    button.textContent = item.word;
+    button.classList.toggle("active", index === syllableIndex);
+    button.addEventListener("click", () => {
+      syllableIndex = index;
+      renderSyllables();
+    });
+    picker.append(button);
+  });
+
+  const item = syllableWords[syllableIndex];
+  document.querySelector("#syllable-word").textContent = item.word;
+  document.querySelector("#syllable-romanization").textContent = item.romanization;
+  document.querySelector("#syllable-meaning").textContent = item.meaning;
+  document.querySelector("#syllable-tip").textContent = item.tip;
+  document.querySelector("#syllable-blocks").innerHTML = item.parts
+    .map((part) => {
+      const [formula, reading] = part.split(" = ");
+      return `<div class="syllable-block"><strong>${escapeText(formula.split(" + ").join(""))}</strong><span>${escapeText(formula)} = ${escapeText(reading || "")}</span></div>`;
+    })
+    .join("");
+}
+
+function renderVocabulary() {
+  const grid = document.querySelector("#vocab-grid");
+  grid.innerHTML = "";
+  songVocabulary.forEach((item) => {
+    const button = document.createElement("button");
+    button.className = "vocab-card";
+    button.type = "button";
+    button.classList.toggle("known", state.words.includes(item.word));
+    button.innerHTML = `
+      <small>${escapeText(item.reading)}</small>
+      <strong>${escapeText(item.word)}</strong>
+      <span>${escapeText(item.meaning)}</span>
+      <span class="vocab-example">${escapeText(item.example)}</span>
+    `;
+    button.addEventListener("click", () => {
+      if (!state.words.includes(item.word)) {
+        state.words.push(item.word);
+      }
+      speakKorean(item.word);
+      save();
+      renderVocabulary();
+      renderStats();
+    });
+    grid.append(button);
+  });
+}
+
+function renderSongs() {
+  const list = document.querySelector("#song-list");
+  list.innerHTML = "";
+  songLessons.forEach((song, index) => {
+    const button = document.createElement("button");
+    button.className = "song-button";
+    button.type = "button";
+    button.classList.toggle("active", index === songIndex);
+    button.innerHTML = `<strong>${escapeText(song.title)}</strong><span>${escapeText(song.level)}</span>`;
+    button.addEventListener("click", () => {
+      songIndex = index;
+      renderSongs();
     });
     list.append(button);
   });
-}
 
-function renderReading() {
-  const passage = dailyReadings[readingIndex];
-  document.querySelector("#reading-type").textContent = passage.type;
-  document.querySelector("#reading-level").textContent = passage.level;
-  document.querySelector("#reading-title").textContent = passage.title;
-  document.querySelector("#reading-passage").innerHTML = passage.paragraphs
-    .map((paragraph) => `<p>${renderClickableWords(paragraph)}</p>`)
+  const song = songLessons[songIndex];
+  document.querySelector("#song-level").textContent = song.level;
+  document.querySelector("#song-title").textContent = song.title;
+  document.querySelector("#song-focus").textContent = song.focus;
+  document.querySelector("#song-practice-korean").textContent = song.korean;
+  document.querySelector("#song-practice-reading").textContent = song.reading;
+  document.querySelector("#song-practice-meaning").textContent = song.meaning;
+  document.querySelector("#lesson-points").innerHTML = song.points
+    .map(([word, meaning]) => `<div class="lesson-point"><strong>${escapeText(word)}</strong><span>${escapeText(meaning)}</span></div>`)
     .join("");
-  document.querySelector("#word-note").textContent = "點擊文章中的英文單字，這裡會顯示繁體中文解釋。";
-  document.querySelector("#reading-question").textContent = passage.question;
-  document.querySelector("#reading-feedback").textContent = "選一個答案後，這裡會顯示閱讀解析。";
 
-  const answers = document.querySelector("#reading-answers");
-  answers.innerHTML = "";
-  passage.options.forEach((option, index) => {
-    const button = document.createElement("button");
-    button.className = "answer";
-    button.type = "button";
-    button.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
-    button.addEventListener("click", () => chooseReadingAnswer(index));
-    answers.append(button);
-  });
-
-  renderReadingList();
+  const completeButton = document.querySelector("#complete-song-lesson");
+  completeButton.textContent = state.completedSongs.includes(song.title) ? "本課已完成" : "完成這堂歌曲課";
 }
 
-function renderClickableWords(text) {
-  return text.split(/(\s+)/).map((part) => {
-    if (/^\s+$/.test(part)) {
-      return part.replaceAll(" ", "&nbsp;");
-    }
+function analyzeLyrics() {
+  const text = document.querySelector("#lyrics-input").value.trim();
+  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const result = document.querySelector("#lyric-lines");
+  document.querySelector("#lyrics-count").textContent = `${lines.length} 行`;
 
-    const word = normalizeWord(part);
-    if (!word) {
-      return escapeHtml(part);
-    }
-
-    return `<button class="word-button" type="button" data-word="${word}">${escapeHtml(part)}</button>`;
-  }).join("");
-}
-
-function chooseReadingAnswer(index) {
-  const passage = dailyReadings[readingIndex];
-  const buttons = [...document.querySelectorAll("#reading-answers .answer")];
-
-  buttons.forEach((button, buttonIndex) => {
-    button.classList.toggle("selected", buttonIndex === index);
-    button.classList.toggle("correct", buttonIndex === passage.answer);
-    button.classList.toggle("wrong", buttonIndex === index && index !== passage.answer);
-  });
-
-  document.querySelector("#reading-feedback").textContent = `${index === passage.answer ? "答對了。" : "這題要再看一次。"} ${passage.explanation}`;
-}
-
-function showWordDefinition(event) {
-  const button = event.target.closest(".word-button");
-  if (!button) {
-    return;
+  if (!lines.length) {
+    result.innerHTML = '<div class="empty-state">請先貼上至少一行韓語歌詞。</div>';
+    return 0;
   }
 
-  document.querySelectorAll(".word-button.active").forEach((item) => item.classList.remove("active"));
-  button.classList.add("active");
+  result.innerHTML = lines.map((line, index) => `
+    <div class="lyric-line">
+      <div>
+        <strong>${escapeText(line)}</strong>
+        <span>${escapeText(romanizeText(line))}</span>
+      </div>
+      <button class="icon-button speak-button" type="button" data-line="${index}" aria-label="播放這一行">▶</button>
+    </div>
+  `).join("");
 
-  const word = button.dataset.word;
-  const definition = wordDefinitions[word] || "目前沒有內建解釋。可以先從上下文猜意思，再把這個字加入自己的單字表。";
-  document.querySelector("#word-note").innerHTML = `<strong>${escapeText(word)}</strong>：${escapeText(definition)}`;
+  result.querySelectorAll("[data-line]").forEach((button) => {
+    button.addEventListener("click", () => {
+      speakKorean(lines[Number(button.dataset.line)]);
+      state.lines += 1;
+      save();
+      renderStats();
+    });
+  });
+  return lines.length;
 }
 
 function renderTasks() {
   const list = document.querySelector("#task-list");
   list.innerHTML = "";
-
   tasks.forEach((task) => {
     const label = document.createElement("label");
     label.className = "task";
@@ -573,340 +318,179 @@ function renderTasks() {
       <input type="checkbox" ${state.tasks[task.id] ? "checked" : ""}>
       <span><strong>${task.title}</strong><span>${task.detail}</span></span>
     `;
-
     label.querySelector("input").addEventListener("change", (event) => {
       state.tasks[task.id] = event.target.checked;
-      updateCompletedDay();
+      updateCheckIn();
       save();
-      renderStats();
       renderCalendar();
+      renderStats();
     });
-
     list.append(label);
   });
 }
 
-function updateCompletedDay() {
-  const today = getDateKey(new Date());
-  const allDone = tasks.every((task) => state.tasks[task.id]);
-  if (allDone && !state.completedDates.includes(today)) {
+function updateCheckIn() {
+  const today = dateKey(new Date());
+  const completed = tasks.every((task) => state.tasks[task.id]);
+  if (completed && !state.completedDates.includes(today)) {
     state.completedDates.push(today);
     state.completedDates.sort();
-    state.days = state.completedDates.length;
-    state.lastCompleted = today;
   }
-  if (!allDone && state.completedDates.includes(today)) {
+  if (!completed) {
     state.completedDates = state.completedDates.filter((date) => date !== today);
-    state.days = state.completedDates.length;
-    state.lastCompleted = state.completedDates.at(-1) || "";
   }
-}
-
-function isTodayCompleted() {
-  return state.completedDates.includes(getDateKey(new Date()));
 }
 
 function renderCalendar() {
   const year = calendarDate.getFullYear();
   const month = calendarDate.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const start = new Date(year, month, 1 - firstDay.getDay());
-  const todayKey = getDateKey(new Date());
+  const start = new Date(year, month, 1 - new Date(year, month, 1).getDay());
+  const today = dateKey(new Date());
   const monthKey = `${year}-${String(month + 1).padStart(2, "0")}`;
-  const monthCompleted = state.completedDates.filter((date) => date.startsWith(monthKey)).length;
+  const completed = state.completedDates.filter((date) => date.startsWith(monthKey)).length;
 
-  document.querySelector("#calendar-title").textContent = `${year} 年 ${month + 1} 月打卡牆`;
-  document.querySelector("#calendar-summary").textContent = `本月已完成 ${monthCompleted} 天。完成今日訓練菜單後，今天會自動亮起。`;
+  document.querySelector("#calendar-title").textContent = `${year} 年 ${month + 1} 月`;
+  document.querySelector("#calendar-summary").textContent = `本月完成 ${completed} 天；四項任務都完成後自動打卡。`;
 
   const grid = document.querySelector("#calendar-grid");
   grid.innerHTML = "";
-
   for (let index = 0; index < 42; index += 1) {
     const day = new Date(start);
     day.setDate(start.getDate() + index);
-    const key = getDateKey(day);
+    const key = dateKey(day);
     const cell = document.createElement("div");
     cell.className = "calendar-day";
     cell.textContent = day.getDate();
-    cell.setAttribute("aria-label", `${key}${state.completedDates.includes(key) ? " 已完成" : " 未完成"}`);
     cell.classList.toggle("outside", day.getMonth() !== month);
     cell.classList.toggle("checked", state.completedDates.includes(key));
-    cell.classList.toggle("today", key === todayKey);
+    cell.classList.toggle("today", key === today);
     grid.append(cell);
   }
 }
 
-function changeCalendarMonth(offset) {
-  calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + offset, 1);
-  renderCalendar();
+function romanizeText(text) {
+  return [...text].map((char) => romanizeSyllable(char)).join("").replace(/\s+/g, " ").trim();
 }
 
-function getDateKey(date) {
+function romanizeSyllable(char) {
+  const code = char.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) {
+    return char;
+  }
+
+  const initial = ["g", "kk", "n", "d", "tt", "r", "m", "b", "pp", "s", "ss", "", "j", "jj", "ch", "k", "t", "p", "h"];
+  const medial = ["a", "ae", "ya", "yae", "eo", "e", "yeo", "ye", "o", "wa", "wae", "oe", "yo", "u", "wo", "we", "wi", "yu", "eu", "ui", "i"];
+  const final = ["", "k", "k", "k", "n", "n", "n", "t", "l", "k", "m", "p", "l", "l", "p", "l", "m", "p", "p", "t", "t", "ng", "t", "t", "k", "t", "p", "h"];
+  const value = code - 0xac00;
+  const initialIndex = Math.floor(value / 588);
+  const medialIndex = Math.floor((value % 588) / 28);
+  const finalIndex = value % 28;
+  return initial[initialIndex] + medial[medialIndex] + final[finalIndex];
+}
+
+function dateKey(date) {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
-function withSourceIndex(items) {
-  return items.map((item, index) => ({ ...item, sourceIndex: index }));
-}
-
-function makeDailySet(items, key, salt) {
-  const source = items.map((item) => item);
-  let seed = hashString(`${key}-${salt}`);
-
-  for (let index = source.length - 1; index > 0; index -= 1) {
-    seed = seededNumber(seed + index);
-    const swapIndex = seed % (index + 1);
-    [source[index], source[swapIndex]] = [source[swapIndex], source[index]];
-  }
-
-  return source;
-}
-
-function hashString(text) {
-  let hash = 2166136261;
-  for (const char of text) {
-    hash ^= char.charCodeAt(0);
-    hash = Math.imul(hash, 16777619);
-  }
-  return hash >>> 0;
-}
-
-function seededNumber(seed) {
-  let value = seed >>> 0;
-  value ^= value << 13;
-  value ^= value >>> 17;
-  value ^= value << 5;
-  return value >>> 0;
-}
-
-function renderReviewList() {
-  const list = document.querySelector("#review-list");
-  const missed = dailyQuestions
-    .map((question, index) => ({ question, index }))
-    .filter((item) => state.answers[item.index] === false);
-
-  list.innerHTML = missed.length
-    ? missed.map((item) => `<li>${item.question.type}: ${item.question.explanation}</li>`).join("")
-    : "<li>目前沒有錯題。做完題目後，錯題解析會集中在這裡。</li>";
-}
-
-function renderTypingPrompt() {
-  const typingItem = dailyTypingPrompts[typingIndex];
-  const prompt = typingItem.english;
-  const input = document.querySelector("#typing-input").value;
-  const promptElement = document.querySelector("#typing-prompt");
-  document.querySelector("#typing-source").textContent = `來源：閱讀分頁「${typingItem.sourceTitle}」`;
-  document.querySelector("#typing-translation").textContent = `中文意思：${typingItem.translation}`;
-
-  promptElement.innerHTML = [...prompt].map((char, index) => {
-    const typed = input[index];
-    const classes = [];
-    if (typed !== undefined) {
-      classes.push(typed === char ? "correct-char" : "wrong-char");
-    }
-    if (index === input.length) {
-      classes.push("current-char");
-    }
-    return `<span class="${classes.join(" ")}">${escapeText(char)}</span>`;
-  }).join("");
-
-  promptElement.querySelector(".current-char")?.scrollIntoView({
-    block: "nearest",
-    inline: "center"
-  });
-}
-
-function updateTypingStats() {
-  const prompt = dailyTypingPrompts[typingIndex].english;
-  const input = document.querySelector("#typing-input").value;
-  const elapsed = typingStart ? Math.max(1, Math.floor((Date.now() - typingStart) / 1000)) : 0;
-  const correctChars = [...input].filter((char, index) => char === prompt[index]).length;
-  const accuracy = input.length ? Math.round((correctChars / input.length) * 100) : 100;
-  const wpm = elapsed ? Math.round((correctChars / 5) / (elapsed / 60)) : 0;
-
-  document.querySelector("#typing-wpm").textContent = wpm;
-  document.querySelector("#typing-accuracy").textContent = `${accuracy}%`;
-  document.querySelector("#typing-time").textContent = `${elapsed}s`;
-
-  if (input === prompt) {
-    finishTyping(wpm, accuracy);
-  } else {
-    document.querySelector("#typing-message").textContent = "輸入時注意空格、大小寫與句尾標點。";
-  }
-}
-
-function handleTypingInput() {
-  if (!typingStart) {
-    typingStart = Date.now();
-    typingTimer = window.setInterval(updateTypingStats, 1000);
-  }
-  renderTypingPrompt();
-  updateTypingStats();
-}
-
-function finishTyping(wpm, accuracy) {
-  window.clearInterval(typingTimer);
-  typingTimer = null;
-  if (wpm > state.bestWpm) {
-    state.bestWpm = wpm;
-  }
-  save();
-  renderStats();
-  document.querySelector("#typing-message").textContent = `完成！本次速度 ${wpm} WPM，正確率 ${accuracy}%。`;
-}
-
-function resetTyping(advance = false) {
-  window.clearInterval(typingTimer);
-  typingTimer = null;
-  typingStart = null;
-  if (advance) {
-    typingIndex = (typingIndex + 1) % dailyTypingPrompts.length;
-  }
-  const input = document.querySelector("#typing-input");
-  input.value = "";
-  input.maxLength = dailyTypingPrompts[typingIndex].english.length;
-  document.querySelector("#typing-wpm").textContent = "0";
-  document.querySelector("#typing-accuracy").textContent = "100%";
-  document.querySelector("#typing-time").textContent = "0s";
-  document.querySelector("#typing-message").textContent = "按原句完整輸入，開始打字後會自動計時。";
-  renderTypingPrompt();
-}
-
-function syncTypingToReading(shouldReset = true) {
-  const sourceIndex = dailyReadings[readingIndex].sourceIndex;
-  const nextIndex = dailyTypingPrompts.findIndex((prompt) => prompt.readingIndex === sourceIndex);
-  if (nextIndex === -1) {
-    return;
-  }
-  typingIndex = nextIndex;
-  resetTyping();
-  if (shouldReset) {
-    document.querySelector("#typing-message").textContent = "已同步到目前閱讀文章的英打句子。";
-  }
-}
-
-function escapeHtml(char) {
-  return char
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll(" ", "&nbsp;");
-}
-
 function escapeText(text) {
-  return text
+  return String(text)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
 
-function normalizeWord(text) {
-  return text
-    .toLowerCase()
-    .replace(/^[^a-z]+|[^a-z]+$/g, "");
-}
-
-function switchPracticeTab(tabName) {
-  document.querySelectorAll(".tab-button").forEach((button) => {
-    const isActive = button.dataset.tab === tabName;
-    button.classList.toggle("active", isActive);
-    button.setAttribute("aria-selected", String(isActive));
-  });
-
-  document.querySelectorAll(".practice-pane").forEach((pane) => {
-    const isActive = pane.id === `pane-${tabName}`;
-    pane.classList.toggle("active", isActive);
-    pane.hidden = !isActive;
-  });
-
-  if (tabName === "typing") {
-    document.querySelector("#typing-input").focus();
-    renderTypingPrompt();
-  }
-}
-
-document.querySelector("#next-question").addEventListener("click", () => {
-  if (quizCompleted) {
-    quizCompleted = false;
-    questionIndex = 0;
-    renderQuestion();
-    return;
-  }
-
-  if (questionIndex === dailyQuestions.length - 1) {
-    quizCompleted = true;
-    renderQuestion();
-    return;
-  }
-
-  questionIndex += 1;
-  renderQuestion();
-});
-
-document.querySelector("#prev-question").addEventListener("click", () => {
-  if (questionIndex === 0) {
-    return;
-  }
-  questionIndex -= 1;
-  renderQuestion();
-});
-
-document.querySelector("#vocab-card").addEventListener("click", () => {
-  showingMeaning = !showingMeaning;
-  renderVocab();
-});
-
-document.querySelector("#vocab-card").addEventListener("keydown", (event) => {
-  if (event.key === "Enter" || event.key === " ") {
-    event.preventDefault();
-    showingMeaning = !showingMeaning;
-    renderVocab();
-  }
-});
-
-document.querySelector("#next-word").addEventListener("click", () => {
-  vocabIndex = (vocabIndex + 1) % dailyVocab.length;
-  showingMeaning = false;
-  renderVocab();
-});
-
-document.querySelector("#prev-word").addEventListener("click", () => {
-  vocabIndex = (vocabIndex - 1 + dailyVocab.length) % dailyVocab.length;
-  showingMeaning = false;
-  renderVocab();
-});
-
-document.querySelector("#known-word").addEventListener("click", () => {
-  const word = dailyVocab[vocabIndex].word;
-  if (!state.knownWords.includes(word)) {
-    state.knownWords.push(word);
-  }
-  save();
-  renderVocab();
-  renderStats();
-});
-
-document.querySelector("#prev-month").addEventListener("click", () => changeCalendarMonth(-1));
-document.querySelector("#next-month").addEventListener("click", () => changeCalendarMonth(1));
-
 document.querySelectorAll(".tab-button").forEach((button) => {
-  button.addEventListener("click", () => switchPracticeTab(button.dataset.tab));
+  button.addEventListener("click", () => {
+    const name = button.dataset.tab;
+    document.querySelectorAll(".tab-button").forEach((item) => {
+      const active = item.dataset.tab === name;
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-selected", String(active));
+    });
+    document.querySelectorAll(".learning-pane").forEach((pane) => {
+      pane.hidden = pane.id !== `pane-${name}`;
+    });
+  });
 });
 
-document.querySelector("#reading-passage").addEventListener("click", showWordDefinition);
-document.querySelector("#typing-input").addEventListener("input", handleTypingInput);
-document.querySelector("#typing-restart").addEventListener("click", () => resetTyping());
-document.querySelector("#typing-sync-reading").addEventListener("click", () => syncTypingToReading());
-document.querySelector("#typing-next").addEventListener("click", () => resetTyping(true));
+document.querySelectorAll("[data-letter-mode]").forEach((button) => {
+  button.addEventListener("click", () => {
+    letterMode = button.dataset.letterMode;
+    letterIndex = 0;
+    document.querySelectorAll("[data-letter-mode]").forEach((item) => {
+      item.classList.toggle("active", item.dataset.letterMode === letterMode);
+    });
+    renderHangul();
+  });
+});
 
-renderQuestion();
-renderReading();
-renderVocab();
+document.querySelector("#speak-letter").addEventListener("click", () => {
+  const example = hangul[letterMode][letterIndex].example.split(" ")[0];
+  speakKorean(example);
+});
+
+document.querySelector("#speak-word").addEventListener("click", () => {
+  const word = syllableWords[syllableIndex].word;
+  speakKorean(word);
+  if (!state.syllables.includes(word)) {
+    state.syllables.push(word);
+  }
+  state.tasks.syllables = state.syllables.length >= 3;
+  updateCheckIn();
+  save();
+  renderTasks();
+  renderCalendar();
+});
+
+document.querySelector("#speak-practice-line").addEventListener("click", () => {
+  speakKorean(songLessons[songIndex].korean);
+});
+
+document.querySelector("#complete-song-lesson").addEventListener("click", () => {
+  const title = songLessons[songIndex].title;
+  if (!state.completedSongs.includes(title)) {
+    state.completedSongs.push(title);
+  }
+  state.tasks.song = true;
+  updateCheckIn();
+  save();
+  renderSongs();
+  renderTasks();
+  renderCalendar();
+});
+
+document.querySelector("#analyze-lyrics").addEventListener("click", () => {
+  const lineCount = analyzeLyrics();
+  state.tasks.lyrics = lineCount >= 2;
+  updateCheckIn();
+  save();
+  renderTasks();
+  renderCalendar();
+});
+
+document.querySelector("#clear-lyrics").addEventListener("click", () => {
+  document.querySelector("#lyrics-input").value = "";
+  document.querySelector("#lyrics-count").textContent = "0 行";
+  document.querySelector("#lyric-lines").innerHTML = '<div class="empty-state">貼上歌詞後，這裡會顯示韓文、近似羅馬拼音與播放按鈕。</div>';
+});
+
+document.querySelector("#prev-month").addEventListener("click", () => {
+  calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1);
+  renderCalendar();
+});
+
+document.querySelector("#next-month").addEventListener("click", () => {
+  calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1);
+  renderCalendar();
+});
+
+renderHangul();
+renderSyllables();
+renderVocabulary();
+renderSongs();
 renderTasks();
-renderStats();
-renderReviewList();
 renderCalendar();
-resetTyping();
+renderStats();
